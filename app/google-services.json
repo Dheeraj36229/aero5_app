@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "102272511608",
+    "firebase_url": "https://aero5-886bf-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "aero5-886bf",
+    "storage_bucket": "aero5-886bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102272511608:android:aero5androidapp",
+        "android_client_info": {
+          "package_name": "com.aero5.mask"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIdsdP-jIExaxL2kD8-I2xhtXJC3lKTcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

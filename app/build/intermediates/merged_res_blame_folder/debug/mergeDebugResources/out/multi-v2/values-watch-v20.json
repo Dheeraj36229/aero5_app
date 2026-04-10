@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.aero5.mask.app-mergeDebugResources-43:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DHEERAJ\\.gradle\\caches\\8.13\\transforms\\811d2bd3a2bd0c2ad4b74b12fb8dfac7\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}
