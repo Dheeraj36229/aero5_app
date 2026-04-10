@@ -28,7 +28,7 @@ jobs:
       - name: Get Version Code
         id: version_info
         run: |
-          VERSION=$(grep "versionCode" app/build.gradle | awk '{print $2}')
+          VERSION=$(grep "versionCode" app/build.gradle | head -n 1 | awk '{print $2}' | tr -d '[:space:]')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
