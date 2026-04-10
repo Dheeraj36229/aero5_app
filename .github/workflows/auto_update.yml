@@ -51,4 +51,4 @@ jobs:
           # Using Firebase CLI (installed by default in GitHub Actions)
           # We update the Realtime Database which the app will listen to
           npm install -g firebase-tools
-          firebase database:set /app_update "{\"latest_version\": $VERSION, \"apk_url\": \"$APK_URL\"}" --project aero5-886bf --token "${{ secrets.FIREBASE_TOKEN }}" --force
+          firebase database:set /app_update "{\"latest_version\": $VERSION, \"apk_url\": \"$APK_URL\"}" --project aero5-886bf --instance aero5-886bf-default-rtdb --token "${{ secrets.FIREBASE_TOKEN }}" --force
