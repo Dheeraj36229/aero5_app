@@ -1119,7 +1119,7 @@ const HEALTH_DATA = {
 
 /* ═══════════════ STATE ═══════════════ */
 let MASK_ID = '', curAQI = 0, curFilter = 72, curMode = 'auto', curChannel = 'BLE 5.0';
-let lastSentTime = 0, lastSentAQI = -1, syncCount = 0, sessionStart = Date.now();
+let lastSentTime = 0, lastSentAQI = -1, lastSentFilter = -1, syncCount = 0, sessionStart = Date.now();
 let forecastBuilt = false, aqiHistory = [], alertsEnabled = true, alertLastAQI = -999;
 let rawPollutants = null; // real values from WAQI
 
@@ -1296,9 +1296,8 @@ function renderAQI(aqi, lv){
 
   // Filter auto mode
   if(curMode==='auto'){
-    curFilter = lv.filter;
-    renderFilter(curFilter);
-    document.getElementById('filterReason').textContent = `Auto mode — AQI ${aqi} → ${lv.filter}% filtration`;
+    // Removed AQI-based static overwrite to prioritize ML-based effective filtration
+    document.getElementById('filterReason').textContent = `Auto mode — optimizing filtration via ML...`;
   }
 
   // Update time
@@ -1368,7 +1367,7 @@ function startFluctuation(){
     updateProtectionScore();
 
     // Background Firebase auto-sync
-    autoSync(curAQI, lv.filter);
+    autoSync(curAQI, curFilter);
 
     // Re-run ML if AQI shifted more than 5 from last ML call
     // Also re-derive breathing from fluctuating PM2.5
@@ -1379,7 +1378,7 @@ function startFluctuation(){
     if(bEl) bEl.textContent = curBreathing;
     if(Math.abs(curAQI - lastMlAqi) >= 5) scheduleMlCall();
 
-    ab('AQI_UPDATE', {aqi: curAQI, filter: lv.filter});
+    ab('AQI_UPDATE', {aqi: curAQI, filter: curFilter});
   }, FLUCTUATE_MS);
 }
 
@@ -1465,6 +1464,8 @@ function onSlider(el){
   document.getElementById('filterPct').textContent = curFilter+'%';
   document.getElementById('filterReason').textContent = `Manual override: ${curFilter}% filtration intensity`;
   updateProtectionScore();
+  // Immediate bridge notification for manual changes
+  ab('AQI_UPDATE', {aqi: curAQI, filter: curFilter});
 }
 
 function setMode(btn, m){
@@ -1473,8 +1474,9 @@ function setMode(btn, m){
   curMode = m;
   document.getElementById('sliderSection').style.display = m==='manual'?'block':'none';
   if(m==='auto' && curAQI){
-    curFilter = getLevel(curAQI).filter; renderFilter(curFilter);
-    document.getElementById('filterReason').textContent = `Auto mode — AQI ${curAQI} → ${curFilter}% filtration`;
+    // Trigger ML immediately when switching back to auto
+    scheduleMlCall();
+    document.getElementById('filterReason').textContent = `Auto mode — initializing ML engine...`;
   } else if(m==='sport'){
     curFilter=85; renderFilter(85);
     document.getElementById('filterReason').textContent = 'Sport mode — increased airflow, 85% filtration';
@@ -1688,12 +1690,13 @@ async function autoSync(aqi, filter){
   if(!MASK_ID) return;
   const now = Date.now();
   if(now - lastSentTime < 15000) return;
-  if(aqi === lastSentAQI) return;
+  // Sync if either AQI or Filter has changed
+  if(aqi === lastSentAQI && filter === lastSentFilter) return;
   try{
     await db.ref('masks/'+MASK_ID).update({
       aqi, filter, timestamp: new Date().toISOString(), source: 'auto'
     });
-    lastSentTime = now; lastSentAQI = aqi; syncCount++;
+    lastSentTime = now; lastSentAQI = aqi; lastSentFilter = filter; syncCount++;
     updateSyncCounters();
   } catch(e){}
 }
