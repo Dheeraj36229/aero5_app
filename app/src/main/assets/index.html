@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
-   AERO5 v5 — Design System
+   AERO5 v6 — Design System
 ═══════════════════════════════════════════════ */
 :root{
   /* Brand */
@@ -162,6 +162,53 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .toast-body{font-size:11px;color:var(--text2);line-height:1.5}
 .toast-close{position:absolute;top:10px;right:12px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text3);font-size:16px}
 
+/* SAFETY STATUS CHIP */
+#safetyStatus {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all var(--ease);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+#safetyStatus::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  opacity: 0.5;
+}
+#safetyIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--ease);
+}
+#safetyTitle {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1.5px;
+  color: var(--teal);
+  transition: all var(--ease);
+}
+#safetySub {
+  font-size: 10px;
+  color: var(--text2);
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
 /* ════════════════════════════════
    HOME TAB
 ════════════════════════════════ */
@@ -275,28 +322,33 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .pct-reason{font-size:11px;color:var(--text2);margin-top:8px;min-height:16px}
 
 /* MODE CARDS */
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 10px;cursor:pointer;transition:all var(--ease);text-align:center;position:relative;overflow:hidden}
-.mode-card.active{border-color:var(--cyan);background:var(--cyan-dim)}
-.mode-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
-.mode-card svg{width:26px;height:26px;stroke:var(--mode-icon);margin:0 auto 6px;display:block;transition:stroke var(--ease)}
-.mode-card.active svg{stroke:var(--cyan)}
-.mode-name{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text3);font-family:'Space Mono',monospace;transition:color var(--ease)}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 12px;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);text-align:center;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.mode-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent);opacity:0;transition:opacity .3s}
+.mode-card.active{border-color:var(--cyan);background:var(--cyan-dim);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,194,255,0.15)}
+.mode-card.active::after{opacity:1}
+.mode-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.mode-card svg{width:28px;height:28px;stroke:var(--text3);transition:all .3s ease}
+.mode-card.active svg{stroke:var(--cyan);filter:drop-shadow(0 0 8px var(--cyan-glow));transform:scale(1.1)}
+.mode-name{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--text3);font-family:'Orbitron',sans-serif;transition:color var(--ease)}
 .mode-card.active .mode-name{color:var(--cyan)}
-.mode-desc{font-size:9px;color:var(--text3);margin-top:3px}
+.mode-desc{font-size:9px;color:var(--text3);margin-top:-2px;font-family:'Space Mono',monospace;opacity:0.7}
+.mode-card:active{transform:scale(.95)}
 
 /* SLIDER */
-.slider-section{padding:4px 0 12px}
-.filter-slider{width:100%;height:4px;appearance:none;border-radius:2px;outline:none;cursor:pointer;
+.slider-section{padding:8px 8px 16px;background:var(--surface2);border-radius:20px;margin-bottom:16px;border:1px solid var(--border)}
+.filter-slider{width:100%;height:6px;appearance:none;border-radius:3px;outline:none;cursor:pointer;
   background:linear-gradient(to right,var(--cyan) var(--fp,72%),var(--surface3) var(--fp,72%));transition:background .1s}
-.filter-slider::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:2.5px solid var(--cyan);box-shadow:0 0 12px var(--cyan-glow);cursor:pointer;transition:box-shadow var(--ease)}
-.slider-marks{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);margin-top:6px;font-family:'Space Mono',monospace;letter-spacing:.5px}
+.filter-slider::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--text);border:3px solid var(--cyan);box-shadow:0 0 15px var(--cyan-glow);cursor:pointer;transition:all .2s ease}
+.filter-slider::-webkit-slider-thumb:active{transform:scale(1.2);box-shadow:0 0 25px var(--cyan-glow)}
+.slider-marks{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);margin-top:10px;font-family:'Space Mono',monospace;letter-spacing:1px}
 
 /* SYNC BTN */
-.sync-btn{width:100%;padding:15px;border:none;border-radius:14px;cursor:pointer;font-family:'Orbitron',monospace;font-size:11px;font-weight:800;letter-spacing:3px;background:linear-gradient(130deg,var(--cyan),var(--teal));color:#050A14;transition:all var(--ease);margin-top:8px;position:relative;overflow:hidden}
-.sync-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.2),transparent)}
-.sync-btn:active{transform:scale(.97)}
-.sync-btn:disabled{opacity:.5}
+.sync-btn{width:100%;padding:18px;border:none;border-radius:18px;cursor:pointer;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,var(--cyan),var(--teal));color:#050A14;transition:all .3s cubic-bezier(.4,0,.2,1);margin-top:8px;position:relative;overflow:hidden;box-shadow:0 4px 15px rgba(0,194,255,0.3)}
+.sync-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);transition:left 0.5s}
+.sync-btn:hover::before{left:100%}
+.sync-btn:active{transform:scale(.96);box-shadow:0 2px 8px rgba(0,194,255,0.2)}
+.sync-btn:disabled{opacity:.6;cursor:not-allowed;filter:grayscale(0.5)}
 .sync-status{display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);margin-top:10px}
 .sync-status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulseDot 2s infinite;flex-shrink:0}
 .sync-status-text{font-size:10px;color:var(--text2);font-family:'Space Mono',monospace;flex:1;letter-spacing:.3px}
@@ -543,6 +595,17 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
     <!-- ══ HOME ══ -->
     <div class="tab active" id="tab-home">
 
+      <!-- SAFETY STATUS CHIP -->
+      <div id="safetyStatus">
+        <div id="safetyIcon" style="background:var(--teal-dim)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="flex:1">
+          <div id="safetyTitle">AIR IS SAFE</div>
+          <div id="safetySub">Ideal conditions. Breathe freely.</div>
+        </div>
+      </div>
+
       <!-- AQI HERO -->
       <div class="hero">
         <div class="hero-glow" id="heroGlow"></div>
@@ -726,65 +789,47 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
         <div class="pct-reason" id="filterReason">Auto mode — adjusting to live AQI</div>
       </div>
 
-      <div class="section-title">OPERATING MODE</div>
+      <div class="section-title">PROTECTION MODE</div>
       <div class="mode-grid">
-        <div class="mode-card active" onclick="setMode(this,'auto')">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-          <div class="mode-name">AUTO</div><div class="mode-desc">AQI-driven</div>
+        <div class="mode-card active" id="mMode-0" onclick="setMasterMode('auto', 0)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 010 7.78L12 21.23l-8.84-8.84a5.5 5.5 0 017.78-7.78L12 5.62l1.06-1.01a5.5 5.5 0 017.78 0z"/></svg>
+          <div class="mode-name">RESTING</div><div class="mode-desc">AI PROTECTION</div>
         </div>
-        <div class="mode-card" onclick="setMode(this,'manual')">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-          <div class="mode-name">MANUAL</div><div class="mode-desc">Custom level</div>
+        <div class="mode-card" id="mMode-1" onclick="setMasterMode('auto', 1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><path d="M12 22V12m0 0l-3 3m3-3l3 3M9 12H3m6 0l-3-3M15 12h6m-6 0l3-3"/></svg>
+          <div class="mode-name">WALKING</div><div class="mode-desc">AI PROTECTION</div>
         </div>
-        <div class="mode-card" onclick="setMode(this,'sport')">
+        <div class="mode-card" id="mMode-2" onclick="setMasterMode('auto', 2)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <div class="mode-name">SPORT</div><div class="mode-desc">High airflow</div>
+          <div class="mode-name">RUNNING</div><div class="mode-desc">AI PROTECTION</div>
         </div>
-        <div class="mode-card" onclick="setMode(this,'sleep')">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M21 12.79A9 9 0 1115.21 7a7 7 0 005.79 5.79z"/></svg>
-          <div class="mode-name">SLEEP</div><div class="mode-desc">Silent mode</div>
+        <div class="mode-card" id="mMode-manual" onclick="setMasterMode('manual')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          <div class="mode-name">MANUAL</div><div class="mode-desc">CUSTOM %</div>
         </div>
       </div>
 
       <div class="slider-section" id="sliderSection" style="display:none">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+           <span style="font-size:10px; color:var(--cyan); font-family:'Orbitron',sans-serif; letter-spacing:1px;">ADJUST FILTRATION</span>
+           <span id="sliderValDisplay" style="font-size:11px; color:var(--text); font-family:'Space Mono',monospace; font-weight:800;">72%</span>
+        </div>
         <input type="range" class="filter-slider" id="filterSlider" min="0" max="100" value="72" style="--fp:72%" oninput="onSlider(this)">
         <div class="slider-marks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
       </div>
 
-      <!-- ══ ML SENSOR PANEL ══ -->
-      <div class="section-title" style="margin-top:4px">ML ENGINE — SMART FILTRATION</div>
+      <!-- ══ SMART ENGINE ══ -->
+      <div class="section-title" style="margin-top:4px">AI ANALYTICS ENGINE</div>
       <div class="ml-panel">
         <div class="ml-row">
-          <div class="ml-label">🫁 BREATHING RATE <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(AUTO · FROM PM2.5)</span></div>
-          <div class="ml-val"><span id="breathVal">16</span> <span style="font-size:9px;color:var(--text3)">br/min</span></div>
+          <div class="ml-label">💨 BREATHING INTENSITY <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(SAMPLED)</span></div>
+          <div class="ml-val"><span id="breathVal">16</span> <span style="font-size:9px;color:var(--text3)">bpm</span></div>
         </div>
-        <!-- Read-only slider — reflects PM2.5-derived breathing rate -->
         <input type="range" class="breath-slider" id="breathSlider" min="8" max="40" value="16" style="--bp:33.3%;pointer-events:none;opacity:0.6" readonly>
-        <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px"><span>12 REST</span><span>↑ with PM2.5</span><span>40 MAX</span></div>
-        <div style="font-size:9px;color:var(--text3);margin-top:4px;font-family:'Space Mono',monospace;letter-spacing:.5px">Auto-computed: higher PM2.5 → faster breathing → lower effective filtration</div>
-
-        <div class="ml-row" style="margin-top:12px;margin-bottom:6px">
-          <div class="ml-label">⚡ ACTIVITY LEVEL <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(OVERRIDE)</span></div>
-          <div id="actLabel" style="font-size:9px;color:var(--purple);font-family:'Space Mono',monospace;letter-spacing:1px">RESTING</div>
-        </div>
-        <div class="act-grid">
-          <div class="act-btn active" id="act0" onclick="setActivity(0)">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 010 7.78L12 21.23l-8.84-8.84a5.5 5.5 0 017.78-7.78L12 5.62l1.06-1.01a5.5 5.5 0 017.78 0z"/></svg>
-            <div class="act-btn-label">RESTING</div>
-          </div>
-          <div class="act-btn" id="act1" onclick="setActivity(1)">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><path d="M12 22V12m0 0l-3 3m3-3l3 3M9 12H3m6 0l-3-3M15 12h6m-6 0l3-3"/></svg>
-            <div class="act-btn-label">WALKING</div>
-          </div>
-          <div class="act-btn" id="act2" onclick="setActivity(2)">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <div class="act-btn-label">RUNNING</div>
-          </div>
-        </div>
 
         <div class="ml-result" id="mlResult">
           <div class="ml-result-dot" id="mlDot" style="background:var(--text3)"></div>
-          <div class="ml-result-text" id="mlResultText">Waiting for AQI data to run ML prediction...</div>
+          <div class="ml-result-text" id="mlResultText">AI is standby...</div>
         </div>
       </div>
 
@@ -794,17 +839,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
       </div>
       <button class="sync-btn" id="syncBtn" onclick="doSync()">⚡ SYNC TO AERO5</button>
 
-      <div class="card" style="margin-top:12px">
-        <div class="section-title" style="margin-bottom:10px">DATA CHANNEL</div>
-        <div class="ch-row">
-          <div class="ch-pill active" onclick="setCh(this,'BLE 5.0')">BLE 5.0</div>
-          <div class="ch-pill" onclick="setCh(this,'Wi-Fi MQTT')">Wi-Fi MQTT</div>
-          <div class="ch-pill" onclick="setCh(this,'USB Serial')">USB Serial</div>
-          <div class="ch-pill" onclick="setCh(this,'LoRa 868')">LoRa 868</div>
-        </div>
-      </div>
-
-      <div class="section-title">FILTER STATUS</div>
+      <div class="section-title">CARTRIDGE HEALTH</div>
       <div class="fstat-row">
         <div class="fstat"><div class="fstat-val" style="color:var(--teal)">87%</div><div class="fstat-key">LIFE LEFT</div></div>
         <div class="fstat"><div class="fstat-val" style="color:var(--cyan)">HEPA</div><div class="fstat-key">GRADE</div></div>
@@ -889,7 +924,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
           <circle cx="24" cy="23" r="1.8" fill="url(#lg3)"/>
         </svg>
         <div class="about-wordmark">AERO5</div>
-        <div class="about-ver">FIRMWARE v2.4.1 · APP v4.0.0</div>
+        <div class="about-ver">FIRMWARE v2.4.1 · APP v6.0.0</div>
         <div class="about-divider"></div>
         <div class="about-stats">
           <div><div class="about-stat-val" id="aboutSyncs">0</div><div class="about-stat-key">TOTAL SYNCS</div></div>
@@ -910,6 +945,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
         <div class="srow">
           <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M1 6s5-2 11-2 11 2 11 2"/><path d="M5 12s3-1 7-1 7 1 7 1"/><path d="M9 18s1-.5 3-.5 3 .5 3 .5"/><line x1="12" y1="20" x2="12" y2="22"/></svg></div><div><div class="srow-title">WAQI Live Feed</div><div class="srow-sub">Real-time AQI · 5 min refresh</div></div></div>
           <div class="srow-val on" id="waqiChip">LIVE</div>
+        </div>
+        <div class="srow" style="flex-direction:column; align-items:flex-start; gap:12px; padding:16px 15px;">
+          <div class="srow-title" style="font-size:11px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;">Data Protocol</div>
+          <div class="ch-row">
+            <div class="ch-pill active" onclick="setCh(this,'BLE 5.0')">BLE 5.0</div>
+            <div class="ch-pill" onclick="setCh(this,'Wi-Fi MQTT')">Wi-Fi</div>
+            <div class="ch-pill" onclick="setCh(this,'USB Serial')">USB</div>
+          </div>
         </div>
       </div>
 
@@ -1260,6 +1303,35 @@ function checkAlert(aqi){
 
 /* ═══════════════ RENDER AQI ═══════════════ */
 function renderAQI(aqi, lv){
+  // Update Safety Status
+  const sStatus = document.getElementById('safetyStatus');
+  const sTitle = document.getElementById('safetyTitle');
+  const sSub = document.getElementById('safetySub');
+  const sIcon = document.getElementById('safetyIcon');
+
+  if (aqi <= 50) {
+    sStatus.style.borderColor = 'rgba(0,255,170,0.2)';
+    sTitle.textContent = 'AIR IS SAFE';
+    sTitle.style.color = 'var(--teal)';
+    sSub.textContent = 'Ideal conditions. Breathe freely.';
+    sIcon.style.background = 'var(--teal-dim)';
+    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  } else if (aqi <= 100) {
+    sStatus.style.borderColor = 'rgba(163,230,53,0.2)';
+    sTitle.textContent = 'MODERATE AIR';
+    sTitle.style.color = '#A3E635';
+    sSub.textContent = 'Sensitive users should consider wearing mask.';
+    sIcon.style.background = 'rgba(163,230,53,0.1)';
+    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+  } else {
+    sStatus.style.borderColor = 'rgba(244,63,94,0.2)';
+    sTitle.textContent = 'WEAR YOUR MASK';
+    sTitle.style.color = 'var(--red)';
+    sSub.textContent = 'Unhealthy air detected. AERO5 is protecting you.';
+    sIcon.style.background = 'rgba(244,63,94,0.1)';
+    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+  }
+
   // Gauge arc: circumference = 2π×50 = 314.16
   const offset = 314.2 * (1 - Math.min(aqi/300, 1));
   document.getElementById('gaugeFill').style.strokeDashoffset = offset;
@@ -1462,29 +1534,40 @@ function onSlider(el){
   curFilter = parseInt(el.value);
   el.style.setProperty('--fp', curFilter+'%');
   document.getElementById('filterPct').textContent = curFilter+'%';
+  document.getElementById('sliderValDisplay').textContent = curFilter+'%';
   document.getElementById('filterReason').textContent = `Manual override: ${curFilter}% filtration intensity`;
   updateProtectionScore();
-  // Immediate bridge notification for manual changes
   ab('AQI_UPDATE', {aqi: curAQI, filter: curFilter});
 }
 
-function setMode(btn, m){
-  document.querySelectorAll('.mode-card').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  curMode = m;
-  document.getElementById('sliderSection').style.display = m==='manual'?'block':'none';
-  if(m==='auto' && curAQI){
-    // Trigger ML immediately when switching back to auto
+function setMasterMode(mode, activity = 0){
+  curMode = mode;
+  if(mode === 'auto'){
+    curActivity = activity;
+    document.getElementById('sliderSection').style.display = 'none';
     scheduleMlCall();
-    document.getElementById('filterReason').textContent = `Auto mode — initializing ML engine...`;
-  } else if(m==='sport'){
-    curFilter=85; renderFilter(85);
-    document.getElementById('filterReason').textContent = 'Sport mode — increased airflow, 85% filtration';
-  } else if(m==='sleep'){
-    curFilter=55; renderFilter(55);
-    document.getElementById('filterReason').textContent = 'Sleep mode — whisper-quiet, 55% filtration';
+    document.getElementById('filterReason').textContent = `AI mode — optimizing filtration...`;
+  } else {
+    document.getElementById('sliderSection').style.display = 'block';
+    document.getElementById('filterReason').textContent = `Manual mode — adjust slider below`;
   }
+
+  // UI Update
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+  const targetId = (mode === 'manual') ? 'mMode-manual' : 'mMode-' + activity;
+  const target = document.getElementById(targetId);
+  if(target) target.classList.add('active');
+
   updateProtectionScore();
+}
+
+function setMode(btn, m){
+  if(m === 'manual') setMasterMode('manual');
+  else setMasterMode('auto', 0);
+}
+
+function setActivity(level){
+  setMasterMode('auto', level);
 }
 
 function setCh(el, ch){
@@ -1624,66 +1707,82 @@ async function autoSyncML(aqi, filter, breathing, activity, eff, penalty, warnin
 
 async function doSync(){
   const btn = document.getElementById('syncBtn');
-  btn.textContent = 'CALLING ML...'; btn.disabled = true;
+  const isManual = (curMode === 'manual');
 
-  // Step 1: GET /predict?aqi=X&breathing=Y&activity=Z
+  btn.textContent = isManual ? 'PREPARING SYNC...' : 'CALLING ML...';
+  btn.disabled = true;
+
+  // Step 1: Call ML if in Auto mode
   let mlData = {};
-  try{
-    const url = `${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
-    const res = await fetch(url);
-    if(res.ok){
-      const d = await res.json();
-      // Values come as strings like "72.50%" — parseFloat handles this correctly
-      const eff     = parseFloat(d.effective_filtration);
-      const penalty = parseFloat(d.breathing_penalty);
-      const rawProt = parseFloat(d.protection_raw);
-      if(!isNaN(eff)){
-        curFilter = Math.round(eff);
-        renderFilter(curFilter);
-        const actLabels = ['Resting','Walking','Running'];
-        document.getElementById('filterReason').textContent =
-          `ML: AQI ${curAQI} · ${curBreathing} br/min · ${actLabels[curActivity]} → ${curFilter}%`;
-        const mlDot = document.getElementById('mlDot');
-        if(mlDot) mlDot.style.background = (d.warning==='Normal') ? 'var(--teal)' : 'var(--red)';
-        const mlResultText = document.getElementById('mlResultText');
-        if(mlResultText) mlResultText.textContent =
-          `Effective: ${eff.toFixed(1)}% · Penalty: ${penalty.toFixed(1)}% · ${d.warning} — ${d.advice}`;
-        mlData = {
-          breathing_rate:       curBreathing,
-          activity_level:       curActivity,
-          effective_filtration: Math.round(eff * 10) / 10,
-          protection_raw:       isNaN(rawProt) ? 0 : Math.round(rawProt * 10) / 10,
-          breathing_penalty:    Math.round(penalty * 10) / 10,
-          ml_warning:           d.warning,
-          ml_advice:            d.advice
-        };
+  if(!isManual && curAQI > 0){
+    try{
+      const url = `${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
+      const res = await fetch(url);
+      if(res.ok){
+        const d = await res.json();
+        const eff = parseFloat(d.effective_filtration);
+        const penalty = parseFloat(d.breathing_penalty);
+        const rawProt = parseFloat(d.protection_raw);
+        if(!isNaN(eff)){
+          curFilter = Math.round(eff);
+          renderFilter(curFilter);
+          const actLabels = ['Resting','Walking','Running'];
+          document.getElementById('filterReason').textContent =
+            `ML: AQI ${curAQI} · ${curBreathing} bpm · ${actLabels[curActivity]} → ${curFilter}%`;
+          const mlDot = document.getElementById('mlDot');
+          if(mlDot) mlDot.style.background = (d.warning==='Normal') ? 'var(--teal)' : 'var(--red)';
+          const mlResultText = document.getElementById('mlResultText');
+          if(mlResultText) mlResultText.textContent =
+            `Effective: ${eff.toFixed(1)}% · Penalty: ${penalty.toFixed(1)}% · ${d.warning}`;
+          mlData = {
+            breathing_rate:       curBreathing,
+            activity_level:       curActivity,
+            effective_filtration: Math.round(eff * 10) / 10,
+            protection_raw:       isNaN(rawProt) ? 0 : Math.round(rawProt * 10) / 10,
+            breathing_penalty:    Math.round(penalty * 10) / 10,
+            ml_warning:           d.warning,
+            ml_advice:            d.advice
+          };
+        }
       }
-    }
-  } catch(e){ console.warn('ML call failed in doSync:', e); }
+    } catch(e){ console.warn('ML call failed in doSync:', e); }
+  }
 
   // Step 2: Push to Firebase
-  btn.textContent = 'SYNCING TO FIREBASE...';
+  btn.textContent = 'TRANSMITTING...';
   try{
-    await db.ref('masks/'+MASK_ID).update({
+    // If manual, we use the curFilter value directly from the slider
+    const payload = {
       aqi:       curAQI,
       filter:    curFilter,
       mode:      curMode,
       timestamp: new Date().toISOString(),
-      source:    'manual_sync',
+      source:    isManual ? 'manual_override' : 'manual_sync',
       ...mlData
-    });
+    };
+
+    await db.ref('masks/'+MASK_ID).update(payload);
+
     syncCount++;
     updateSyncCounters();
-    btn.textContent = 'FIREBASE UPDATED ✓';
+    btn.textContent = 'SYNC SUCCESS ✓';
+    btn.style.background = 'var(--teal)';
+
     document.getElementById('syncStatusText').textContent =
-      `Firebase updated — AQI:${curAQI} · Filter:${curFilter}% · Breathing:${curBreathing} br/min · ML:${mlData.ml_warning||'—'}`;
-    ab('SYNC', {aqi:curAQI, filter:curFilter});
+      `Sent to Firebase: ${curMode.toUpperCase()} | ${curFilter}% | ${new Date().toLocaleTimeString()}`;
+
+    ab('SYNC', {aqi:curAQI, filter:curFilter, mode:curMode});
   } catch(e){
     btn.textContent = 'SYNC FAILED ✕';
-    document.getElementById('syncStatusText').textContent = 'Firebase sync failed — check connection';
+    btn.style.background = 'var(--red)';
+    document.getElementById('syncStatusText').textContent = 'Firebase connection error';
   }
-  btn.disabled = false;
-  setTimeout(()=>btn.textContent='⚡ SYNC TO AERO5', 2500);
+
+  setTimeout(()=>{
+    btn.disabled = false;
+    btn.textContent = '⚡ SYNC TO AERO5';
+    btn.style.background = ''; // Reset to CSS gradient
+  }, 2500);
 }
 
 async function autoSync(aqi, filter){
