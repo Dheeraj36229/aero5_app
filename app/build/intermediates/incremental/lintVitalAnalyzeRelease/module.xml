@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="C:\Users\DHEERAJ\Downloads\AERO5-ML-Connected\AERO5-ML-Connected\app"
+    name=":app"
+    type="APP"
+    maven="AERO5:app:unspecified"
+    agpVersion="8.13.2"
+    buildFolder="build"
+    bootClassPath="C:\Users\DHEERAJ\AppData\Local\Android\Sdk\platforms\android-34\android.jar;C:\Users\DHEERAJ\AppData\Local\Android\Sdk\build-tools\35.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

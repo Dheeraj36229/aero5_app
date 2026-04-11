@@ -188,8 +188,19 @@ public class MainActivity extends AppCompatActivity {
                 String url = req.getUrl().toString();
                 return !(url.startsWith("http://") || url.startsWith("https://"));
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                syncWithService();
+            }
         });
         webView.loadUrl("file:///android_asset/index.html");
+    }
+
+    private void syncWithService() {
+        // When app returns to foreground/reloads, update UI with service's latest data
+        webView.evaluateJavascript("if(typeof ab === 'function') ab('SERVICE_SYNC', {});", null);
     }
 
     private class Bridge {
@@ -217,8 +228,15 @@ public class MainActivity extends AppCompatActivity {
                     case "ALERT_TOGGLE":
                         AeroBackgroundService.setAlertsEnabled(data.optBoolean("enabled", true));
                         break;
+                    case "SERVICE_SYNC":
+                        runOnUiThread(this::syncWithService);
+                        break;
                 }
             } catch (Exception e) { e.printStackTrace(); }
+        }
+
+        private void syncWithService() {
+            webView.evaluateJavascript("if(typeof syncFromFirebase === 'function') syncFromFirebase();", null);
         }
     }
 

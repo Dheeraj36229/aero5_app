@@ -1192,6 +1192,24 @@ function ab(action, data){
   catch(e){}
 }
 
+function syncFromFirebase() {
+  if(!MASK_ID) return;
+  db.ref('masks/'+MASK_ID).once('value').then(snap => {
+    if(snap.exists()) {
+      const d = snap.val();
+      if(d.aqi) {
+        curAQI = d.aqi;
+        const lv = getLevel(curAQI);
+        renderAQI(curAQI, lv);
+      }
+      if(d.filter) {
+        curFilter = d.filter;
+        renderFilter(curFilter);
+      }
+    }
+  });
+}
+
 /* ═══════════════ SPLASH ═══════════════ */
 const msgs = ['LOADING MODULES','CONNECTING FIREBASE','CALIBRATING SENSORS','READY'];
 let mi = 0;

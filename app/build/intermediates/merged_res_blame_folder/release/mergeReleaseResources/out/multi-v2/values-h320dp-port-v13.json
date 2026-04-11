@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.aero5.mask.app-mergeReleaseResources-43:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DHEERAJ\\.gradle\\caches\\8.13\\transforms\\75652352412062c2e9c5992e110c4899\\transformed\\material-1.11.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "63",
+                        "endOffsets": "114"
+                    }
+                }
+            ]
+        }
+    ]
+}

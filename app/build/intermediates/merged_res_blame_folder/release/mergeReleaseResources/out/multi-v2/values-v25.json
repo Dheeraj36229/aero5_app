@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.aero5.mask.app-mergeReleaseResources-43:/values-v25/values-v25.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DHEERAJ\\.gradle\\caches\\8.13\\transforms\\811d2bd3a2bd0c2ad4b74b12fb8dfac7\\transformed\\appcompat-1.6.1\\res\\values-v25\\values-v25.xml",
+                    "from": {
+                        "startLines": "2,3,4,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,126,209,308",
+                        "endLines": "2,3,5,7",
+                        "endColumns": "70,82,12,12",
+                        "endOffsets": "121,204,303,414"
+                    }
+                }
+            ]
+        }
+    ]
+}

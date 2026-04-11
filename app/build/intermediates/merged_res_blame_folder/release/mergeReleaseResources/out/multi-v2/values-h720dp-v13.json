@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.aero5.mask.app-mergeReleaseResources-43:/values-h720dp-v13/values-h720dp-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\DHEERAJ\\.gradle\\caches\\8.13\\transforms\\811d2bd3a2bd0c2ad4b74b12fb8dfac7\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "66",
+                        "endOffsets": "117"
+                    }
+                }
+            ]
+        }
+    ]
+}
