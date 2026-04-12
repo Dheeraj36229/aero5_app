@@ -1045,7 +1045,13 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
           <circle cx="24" cy="23" r="1.8" fill="url(#lg3)"/>
         </svg>
         <div class="about-wordmark">AERO5</div>
-        <div class="about-ver">FIRMWARE v2.4.1 · APP v5.0.0</div>
+        <div class="about-ver" id="appVersionDisplay">FIRMWARE v2.4.1 · APP v--</div>
+        <div id="updateContainer" style="display:none; margin-top:12px;">
+          <button class="sync-btn" id="updateBtn" onclick="downloadUpdate()" style="background:linear-gradient(130deg, var(--amber), var(--red)); color:white;">
+            NEW UPDATE AVAILABLE!
+          </button>
+          <div id="updateInfo" style="font-size:10px; color:var(--text3); margin-top:6px; font-family:'Space Mono',monospace;"></div>
+        </div>
         <div class="about-divider"></div>
         <div class="about-stats">
           <div><div class="about-stat-val" id="aboutSyncs">0</div><div class="about-stat-key">TOTAL SYNCS</div></div>
@@ -1264,6 +1270,45 @@ function openInstructions(){
   switchTab('esp');
   // Just initialize some basic UI without full background services
   renderFilter(72);
+}
+
+/* ═══ UPDATE CHECKER ═══ */
+let latestUpdateUrl = "";
+
+async function checkUpdates() {
+  try {
+    const currentVersion = window.AndroidBridge ? window.AndroidBridge.getAppVersion() : "0.0.0";
+    const currentVersionCode = window.AndroidBridge ? window.AndroidBridge.getAppVersionCode() : 0;
+
+    document.getElementById('appVersionDisplay').textContent = `FIRMWARE v2.4.1 · APP v${currentVersion}`;
+
+    // Fetch update info from GitHub (via the release tag convention used in CI)
+    // Or from the Firebase DB which is updated by the CI/CD
+    const snap = await db.ref('app_update').get();
+    if (snap.exists()) {
+      const data = snap.val();
+      const latestVersionCode = data.latest_version;
+      latestUpdateUrl = data.apk_url;
+
+      if (latestVersionCode > currentVersionCode) {
+        document.getElementById('updateContainer').style.display = 'block';
+        document.getElementById('updateInfo').textContent = `New version available (v${latestVersionCode})`;
+
+        // Notify the user immediately on app open
+        showToast('Update Available', `A new version (v${latestVersionCode}) is ready. Go to Settings to install.`);
+      }
+    }
+  } catch (e) {
+    console.error("Update check failed", e);
+  }
+}
+
+function downloadUpdate() {
+  if (latestUpdateUrl && window.AndroidBridge) {
+    window.AndroidBridge.openUrl(latestUpdateUrl);
+  } else if (latestUpdateUrl) {
+    window.open(latestUpdateUrl, '_blank');
+  }
 }
 
 /* ═══ UPDATE ESP DISPLAY ═══ */
@@ -2071,6 +2116,9 @@ async function fetchWAQI(lat, lon){
 
 /* ═══════════════ INIT ═══════════════ */
 function initApp(){
+  // Check for updates
+  checkUpdates();
+
   // Show ESP badge to draw attention to setup tab
   setTimeout(()=>{const b=document.getElementById("espBadge");if(b)b.style.display="block";},3000);
   renderFilter(72);

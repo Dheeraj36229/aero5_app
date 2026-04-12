@@ -1,0 +1,2 @@
+rootProject.name = "AERO5"
+include ':app'

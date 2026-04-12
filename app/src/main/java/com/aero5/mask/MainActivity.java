@@ -98,6 +98,38 @@ public class MainActivity extends AppCompatActivity {
     /** Bridge: HTML can call window.AndroidBridge.onEvent(action, json) */
     private class AndroidBridge {
         @JavascriptInterface
+        public String getAppVersion() {
+            try {
+                return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                return "0.0.0";
+            }
+        }
+
+        @JavascriptInterface
+        public int getAppVersionCode() {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    return (int) getPackageManager().getPackageInfo(getPackageName(), 0).getLongVersionCode();
+                } else {
+                    return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                }
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+
+        @JavascriptInterface
+        public void openUrl(String url) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @JavascriptInterface
         public void onEvent(String action, String jsonStr) {
             try {
                 JSONObject data = new JSONObject(jsonStr);

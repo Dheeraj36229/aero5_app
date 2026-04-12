@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>AERO5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#05080f;--card:#0d1526;--card2:#111d30;
+  --border:rgba(0,212,255,0.12);--border2:rgba(0,212,255,0.22);
+  --glow:#00d4ff;--glow2:#00ffb3;
+  --green:#00ffb3;--amber:#f59e0b;--red:#f43f5e;--purple:#7c3aed;
+  --text:#f0f6ff;--muted:#4a6080;--muted2:#7a9ab8;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px}
+.bg-orb1{position:absolute;top:-120px;right:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 65%)}
+.bg-orb2{position:absolute;bottom:-100px;left:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.07) 0%,transparent 65%)}
+.scanline{position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,.012) 3px,rgba(0,212,255,.012) 4px)}
+#splashScreen,#loginScreen,#appScreen{position:fixed;inset:0;z-index:10}
+#splashScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);transition:opacity .6s ease}
+#splashScreen.out{opacity:0;pointer-events:none}
+.splash-logo{font-family:'Orbitron',monospace;font-size:58px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,#00d4ff 0%,#00ffb3 50%,#7c3aed 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(0,212,255,.4))}
+.splash-tagline{font-size:10px;letter-spacing:5px;color:var(--muted2);margin-top:4px;font-family:'Space Mono',monospace}
+.splash-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--glow),transparent);margin:28px auto}
+.splash-ring-wrap{position:relative;width:72px;height:72px}
+.splash-ring{width:72px;height:72px;border-radius:50%;border:2px solid rgba(0,212,255,.1);border-top-color:var(--glow);animation:spin 1s linear infinite}
+.splash-ring2{position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(0,255,179,.08);border-bottom-color:var(--glow2);animation:spin 1.5s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.splash-status{font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:20px;font-family:'Space Mono',monospace;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+#loginScreen{display:none;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+.login-wrap{width:100%;max-width:360px}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo-text{font-family:'Orbitron',monospace;font-size:42px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00d4ff,#00ffb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-logo-sub{font-size:9px;letter-spacing:4px;color:var(--muted);margin-top:6px;font-family:'Space Mono',monospace}
+.login-card{background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:28px 24px;box-shadow:0 0 60px rgba(0,212,255,.06),0 20px 60px rgba(0,0,0,.4)}
+.field-group{margin-bottom:18px}
+.field-label{font-size:10px;letter-spacing:3px;color:var(--muted2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.field-label-dot{width:4px;height:4px;border-radius:50%;background:var(--glow)}
+.field-input{width:100%;padding:14px 16px;background:rgba(0,212,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Space Mono',monospace;font-size:14px;outline:none;transition:border-color .2s,background .2s;letter-spacing:1px}
+.field-input:focus{border-color:var(--glow);background:rgba(0,212,255,.07)}
+.field-input::placeholder{color:var(--muted)}
+.login-btn{width:100%;padding:16px;border:none;border-radius:14px;cursor:pointer;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:4px;background:linear-gradient(135deg,#00d4ff,#00ffb3);color:#05080f;margin-top:8px;transition:all .2s}
+.login-btn:active{transform:scale(.97)}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-err{font-size:11px;color:var(--red);text-align:center;margin-top:12px;min-height:16px;font-family:'Space Mono',monospace;letter-spacing:1px}
+#appScreen{display:none;flex-direction:column;overflow:hidden;background:var(--bg)}
+.topbar{flex-shrink:0;padding:calc(var(--safe-top) + 10px) 20px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,212,255,.07);background:rgba(5,8,15,.85);backdrop-filter:blur(20px);position:relative;z-index:50}
+.topbar-logo{font-family:'Orbitron',monospace;font-size:16px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#00d4ff,#00ffb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.sync-badge{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:2px;font-family:'Space Mono',monospace;padding:4px 10px;border-radius:20px;background:rgba(0,255,179,.07);border:1px solid rgba(0,255,179,.2);color:var(--glow2)}
+.sync-dot{width:5px;height:5px;border-radius:50%;background:var(--glow2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.mask-id-badge{font-size:9px;font-family:'Space Mono',monospace;color:var(--muted2);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 14px 90px;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.scroll::-webkit-scrollbar{display:none}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;padding:6px 8px calc(var(--safe-bot) + 6px);background:rgba(5,8,15,.94);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;justify-content:space-around;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 12px;border-radius:14px;transition:all .2s;flex:1}
+.nav-item.active{background:rgba(0,212,255,.08)}
+.nav-icon-svg{width:22px;height:22px;margin:0 auto}
+.nav-label{font-size:8px;letter-spacing:2px;color:var(--muted);transition:color .2s;font-family:'Space Mono',monospace}
+.nav-item.active .nav-label{color:var(--glow)}
+.tab{display:none}.tab.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tab.active>*{animation:fadeUp .3s ease both}
+.tab.active>*:nth-child(1){animation-delay:.00s}.tab.active>*:nth-child(2){animation-delay:.05s}
+.tab.active>*:nth-child(3){animation-delay:.10s}.tab.active>*:nth-child(4){animation-delay:.15s}
+.tab.active>*:nth-child(5){animation-delay:.20s}.tab.active>*:nth-child(6){animation-delay:.25s}
+.sec-label{font-size:9px;letter-spacing:4px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.25),transparent)}
+.aqi-hero{background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+.aqi-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.5),transparent)}
+.aqi-hero-bg{position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;pointer-events:none;transition:background .6s}
+.loc-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.loc-city{font-size:15px;font-weight:700;letter-spacing:.3px}
+.loc-detail{font-size:9px;color:var(--muted2);font-family:'Space Mono',monospace;margin-top:3px}
+.live-pill{display:flex;align-items:center;gap:5px;font-size:9px;font-family:'Space Mono',monospace;letter-spacing:2px;padding:4px 10px;border-radius:20px;white-space:nowrap;transition:all .5s}
+.aqi-center{display:flex;gap:16px;align-items:center}
+.ring-wrap{position:relative;width:112px;height:112px;flex-shrink:0}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-family:'Orbitron',monospace;font-size:28px;font-weight:800;line-height:1;transition:color .5s}
+.ring-label{font-size:8px;letter-spacing:3px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace}
+.aqi-right{flex:1;min-width:0}
+.aqi-category{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:5px;transition:color .5s}
+.aqi-message{font-size:11px;color:var(--muted2);line-height:1.55;margin-bottom:10px}
+.aqi-scale{display:flex;gap:3px;height:4px}
+.scale-seg{flex:1;border-radius:2px;opacity:.2;transition:opacity .5s}
+.scale-seg.lit{opacity:1}
+.alert-banner{display:none;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;margin-bottom:12px;border:1px solid rgba(244,63,94,.3);background:rgba(244,63,94,.07)}
+.alert-banner.show{display:flex}
+.alert-text{font-size:12px;color:#f87171;line-height:1.5;font-weight:500}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center}
+.stat-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;line-height:1}
+.stat-key{font-size:7px;letter-spacing:2px;color:var(--muted);margin-top:4px;font-family:'Space Mono',monospace}
+.stat-unit{font-size:7px;color:var(--muted);margin-top:1px}
+.poll-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.poll-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;position:relative;overflow:hidden}
+.poll-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c,#00d4ff),transparent);opacity:.35}
+.poll-name{font-size:9px;letter-spacing:3px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:6px}
+.poll-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;line-height:1}
+.poll-unit{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.poll-status{font-size:9px;font-weight:700;letter-spacing:1px;margin-top:5px}
+.poll-bar-track{height:3px;border-radius:2px;background:rgba(255,255,255,.07);margin-top:7px}
+.poll-bar-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin-bottom:12px}
+.info-row{display:flex;gap:12px;align-items:flex-start}
+.info-icon-wrap{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(0,212,255,.08);border:1px solid var(--border)}
+.info-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.info-desc{font-size:11px;color:var(--muted2);line-height:1.6}
+.forecast-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.forecast-scroll::-webkit-scrollbar{display:none}
+.fc{flex-shrink:0;text-align:center;padding:10px 9px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02);min-width:58px}
+.fc.now{border-color:var(--glow);background:rgba(0,212,255,.06)}
+.fc-time{font-size:8px;letter-spacing:1px;color:var(--muted);font-family:'Space Mono',monospace}
+.fc-aqi{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;margin:5px 0 3px;transition:color .3s}
+.fc-cat{font-size:8px;letter-spacing:.5px;font-weight:600}
+.fc-max{font-size:7px;color:var(--muted);margin-top:2px}
+.filter-hero{background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:18px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
+.filter-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.5),transparent)}
+.mask-svg-wrap{margin:14px auto;position:relative;width:170px;height:120px}
+.mask-glow-ring{position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 65%);animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.05);opacity:1}}
+.filter-pct-display{font-family:'Orbitron',monospace;font-size:50px;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--glow),var(--glow2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.filter-sublabel{font-size:9px;letter-spacing:4px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:4px}
+.filter-reason{font-size:11px;color:var(--muted2);margin-top:8px;min-height:16px}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mode-btn{padding:12px 8px;border-radius:14px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .2s;text-align:center}
+.mode-btn.active{border-color:var(--glow);background:rgba(0,212,255,.08)}
+.mode-btn-icon{width:26px;height:26px;margin:0 auto 6px;display:block}
+.mode-btn-name{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;transition:color .2s}
+.mode-btn.active .mode-btn-name{color:var(--glow)}
+.mode-btn-desc{font-size:9px;color:var(--muted);margin-top:2px}
+.slider-wrap{padding:2px 0 12px}
+.filter-slider{width:100%;height:5px;appearance:none;border-radius:3px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--glow) var(--fp,72%),rgba(255,255,255,.08) var(--fp,72%))}
+.filter-slider::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--glow);box-shadow:0 0 14px rgba(0,212,255,.5);cursor:pointer}
+.slider-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);letter-spacing:1px;font-family:'Space Mono',monospace;margin-top:5px}
+.sync-btn{width:100%;padding:15px;border:none;border-radius:14px;cursor:pointer;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,rgba(0,212,255,.9),rgba(0,255,179,.7));color:#05080f;margin-top:6px;transition:all .2s}
+.sync-btn:active{transform:scale(.97)}
+.sync-btn:disabled{opacity:.5}
+.status-strip{display:flex;gap:8px;align-items:center;padding:10px 13px;border-radius:12px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.1);margin-top:10px}
+.status-dot-green{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.status-text{font-size:11px;color:var(--muted2);font-family:'Space Mono',monospace;flex:1;letter-spacing:.5px}
+.channel-grid{display:flex;gap:8px;flex-wrap:wrap}
+.ch-pill{padding:6px 13px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:1px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Space Mono',monospace}
+.ch-pill.active{background:rgba(0,255,179,.08);border-color:var(--glow2);color:var(--glow2)}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.profile-card{padding:14px 10px;border-radius:14px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .2s;text-align:center}
+.profile-card.active{border-color:var(--purple);background:rgba(124,58,237,.1)}
+.profile-icon-svg{width:34px;height:34px;margin:0 auto 8px;display:block}
+.profile-name{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace}
+.profile-card.active .profile-name{color:var(--purple)}
+.advice-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:15px;margin-bottom:12px}
+.advice-header{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.advice-icon-wrap{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);flex-shrink:0}
+.advice-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.advice-sub{font-size:11px;color:var(--muted2)}
+.advice-items{display:flex;flex-direction:column;gap:8px}
+.advice-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.advice-item-icon{width:18px;height:18px;flex-shrink:0;margin-top:2px}
+.advice-item-text{font-size:12px;color:var(--muted2);line-height:1.5}
+.exposure-score{font-family:'Orbitron',monospace;font-size:40px;font-weight:800;background:linear-gradient(135deg,var(--green),var(--glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.exposure-label{font-size:9px;letter-spacing:3px;color:var(--muted);font-family:'Space Mono',monospace}
+.exp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.exp-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.exp-stat-val{font-family:'Orbitron',monospace;font-size:17px;font-weight:700}
+.exp-stat-key{font-size:8px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:4px}
+.history-bars{display:flex;gap:4px;align-items:flex-end;height:58px;margin-top:6px}
+.h-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.h-bar{width:100%;border-radius:3px 3px 0 0;transition:height .6s cubic-bezier(.4,0,.2,1);min-height:4px}
+.h-bar-label{font-size:7px;color:var(--muted);font-family:'Space Mono',monospace}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;text-align:center;margin-bottom:12px}
+.about-logo{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00d4ff,#00ffb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.about-ver{font-size:10px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:4px}
+.about-divider{height:1px;background:var(--border);margin:14px 0}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.about-stat-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--glow)}
+.about-stat-key{font-size:9px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:3px}
+.settings-group{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:12px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
+.setting-row:last-child{border-bottom:none}
+.setting-left{display:flex;align-items:center;gap:11px}
+.setting-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(0,212,255,.08);flex-shrink:0}
+.setting-icon svg{width:17px;height:17px}
+.setting-title{font-size:13px;font-weight:600}
+.setting-sub{font-size:10px;color:var(--muted2);margin-top:1px}
+.setting-val{font-size:10px;font-family:'Space Mono',monospace;letter-spacing:1px}
+.setting-val.on{color:var(--green)}
+.setting-val.warn{color:var(--amber)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.04)}
+.toggle-wrap{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.1);cursor:pointer;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--muted2);transition:.3s}
+.toggle-input:checked+.toggle-slider{background:var(--green)}
+.toggle-input:checked+.toggle-slider::before{transform:translateX(20px);background:#05080f}
+.logout-btn{width:100%;padding:14px;border:1px solid rgba(244,63,94,.3);border-radius:14px;cursor:pointer;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:3px;background:rgba(244,63,94,.06);color:var(--red);transition:all .2s;margin-top:4px}
+.logout-btn:active{background:rgba(244,63,94,.15)}
+.notif-toast{position:fixed;top:calc(var(--safe-top) + 68px);left:12px;right:12px;z-index:999;background:rgba(13,21,38,.97);border:1px solid rgba(244,63,94,.4);border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(-16px);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.notif-toast.show{transform:translateY(0);opacity:1}
+.notif-toast-icon{width:30px;height:30px;border-radius:8px;background:rgba(244,63,94,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-toast-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;font-family:'Orbitron',monospace;letter-spacing:1px}
+.notif-toast-body{font-size:11px;color:var(--muted2);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-grid"></div><div class="bg-orb1"></div><div class="bg-orb2"></div></div>
+<div class="scanline"></div>
+
+<!-- TOAST -->
+<div class="notif-toast" id="notifToast">
+  <div class="notif-toast-icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  </div>
+  <div><div class="notif-toast-title" id="notifTitle">AQI ALERT</div><div class="notif-toast-body" id="notifBody">Air quality has exceeded safe levels.</div></div>
+</div>
+
+<!-- SPLASH -->
+<div id="splashScreen">
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <div class="splash-logo">AERO5</div>
+    <div class="splash-tagline">SMART MASK INTELLIGENCE</div>
+    <div class="splash-divider"></div>
+    <div class="splash-ring-wrap"><div class="splash-ring"></div><div class="splash-ring2"></div></div>
+    <div class="splash-status" id="splashStatus">INITIALIZING...</div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="login-logo-text">AERO5</div>
+      <div class="login-logo-sub">SMART MASK INTELLIGENCE SYSTEM</div>
+    </div>
+    <div class="login-card">
+      <div class="field-group">
+        <div class="field-label"><span class="field-label-dot"></span>MASK ID</div>
+        <input class="field-input" id="maskId" placeholder="e.g. MASK_001" autocomplete="off" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="field-group">
+        <div class="field-label"><span class="field-label-dot"></span>ACCESS KEY</div>
+        <input class="field-input" id="maskKey" type="password" placeholder="Enter your key">
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">CONNECT MASK</button>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen">
+  <div class="topbar">
+    <div class="topbar-logo">AERO5</div>
+    <div class="topbar-right">
+      <div class="sync-badge"><div class="sync-dot"></div><span>LIVE</span></div>
+      <div class="mask-id-badge" id="maskIdBadge">--</div>
+    </div>
+  </div>
+
+  <div class="scroll" id="scrollArea">
+
+    <!-- HOME -->
+    <div class="tab active" id="tab-home">
+      <div class="aqi-hero">
+        <div class="aqi-hero-bg" id="heroBg"></div>
+        <div class="loc-row">
+          <div><div class="loc-city" id="locCity">Detecting...</div><div class="loc-detail" id="locDetail">-- N · -- E</div></div>
+          <div class="live-pill" id="livePill"><div class="sync-dot"></div><span id="lastUpdate">LIVE</span></div>
+        </div>
+        <div class="aqi-center">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 112 112"><circle cx="56" cy="56" r="48" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8"/><circle cx="56" cy="56" r="48" fill="none" id="aqiArc" stroke="#00ffb3" stroke-width="8" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset 1s ease,stroke .5s"/></svg>
+            <div class="ring-inner"><div class="ring-num" id="aqiNum">--</div><div class="ring-label">AQI</div></div>
+          </div>
+          <div class="aqi-right">
+            <div class="aqi-category" id="aqiCat">Loading...</div>
+            <div class="aqi-message" id="aqiMsg">Fetching live air quality for your GPS location.</div>
+            <div class="aqi-scale">
+              <div class="scale-seg" style="background:#00ffb3" id="s0"></div>
+              <div class="scale-seg" style="background:#a8e063" id="s1"></div>
+              <div class="scale-seg" style="background:#f59e0b" id="s2"></div>
+              <div class="scale-seg" style="background:#f97316" id="s3"></div>
+              <div class="scale-seg" style="background:#f43f5e" id="s4"></div>
+              <div class="scale-seg" style="background:#7c3aed" id="s5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-banner" id="alertBanner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="alert-text" id="alertText">Air quality alert active.</div>
+      </div>
+
+      <div class="stat-strip">
+        <div class="stat-box"><div class="stat-val" style="color:#f43f5e" id="statPm25">--</div><div class="stat-key">PM2.5</div><div class="stat-unit">μg/m³</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#f59e0b" id="statPm10">--</div><div class="stat-key">PM10</div><div class="stat-unit">μg/m³</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#7c3aed" id="statNo2">--</div><div class="stat-key">NO₂</div><div class="stat-unit">ppb</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:#00d4ff" id="statO3">--</div><div class="stat-key">O₃</div><div class="stat-unit">ppb</div></div>
+      </div>
+
+      <div class="sec-label">POLLUTANT BREAKDOWN</div>
+      <div class="poll-grid">
+        <div class="poll-card" style="--c:#f43f5e"><div class="poll-name">PM 2.5</div><div class="poll-val" id="pm25val" style="color:#f43f5e">--</div><div class="poll-unit">μg/m³</div><div class="poll-status" id="pm25status" style="color:#f43f5e">--</div><div class="poll-bar-track"><div class="poll-bar-fill" id="pm25bar" style="background:#f43f5e;width:0%"></div></div></div>
+        <div class="poll-card" style="--c:#f59e0b"><div class="poll-name">PM 10</div><div class="poll-val" id="pm10val" style="color:#f59e0b">--</div><div class="poll-unit">μg/m³</div><div class="poll-status" id="pm10status" style="color:#f59e0b">--</div><div class="poll-bar-track"><div class="poll-bar-fill" id="pm10bar" style="background:#f59e0b;width:0%"></div></div></div>
+        <div class="poll-card" style="--c:#7c3aed"><div class="poll-name">NO₂</div><div class="poll-val" id="no2val" style="color:#7c3aed">--</div><div class="poll-unit">ppb</div><div class="poll-status" id="no2status" style="color:#7c3aed">--</div><div class="poll-bar-track"><div class="poll-bar-fill" id="no2bar" style="background:#7c3aed;width:0%"></div></div></div>
+        <div class="poll-card" style="--c:#00d4ff"><div class="poll-name">O₃ (Ozone)</div><div class="poll-val" id="o3val" style="color:#00d4ff">--</div><div class="poll-unit">ppb</div><div class="poll-status" id="o3status" style="color:#00d4ff">--</div><div class="poll-bar-track"><div class="poll-bar-fill" id="o3bar" style="background:#00d4ff;width:0%"></div></div></div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-row">
+          <div class="info-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div><div class="info-title" id="advisoryTitle">Loading...</div><div class="info-desc" id="advisoryDesc">Fetching health guidance.</div></div>
+        </div>
+      </div>
+
+      <div class="sec-label">DAILY FORECAST</div>
+      <div class="card" style="padding:14px"><div class="forecast-scroll" id="forecastRow"></div></div>
+    </div>
+
+    <!-- MASK -->
+    <div class="tab" id="tab-mask">
+      <div class="filter-hero">
+        <div class="sec-label" style="justify-content:center;margin-bottom:4px">FILTRATION CONTROL</div>
+        <div class="mask-svg-wrap">
+          <div class="mask-glow-ring"></div>
+          <svg width="170" height="120" viewBox="0 0 170 120">
+            <defs>
+              <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0d1a30"/><stop offset="100%" stop-color="#070f1e"/></linearGradient>
+              <linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00d4ff"/><stop offset="100%" stop-color="#00ffb3"/></linearGradient>
+            </defs>
+            <ellipse cx="85" cy="70" rx="72" ry="43" fill="url(#mg)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+            <rect x="64" y="26" width="42" height="17" rx="6" fill="#0a1525" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+            <text x="85" y="38.5" text-anchor="middle" font-family="Orbitron,monospace" font-size="9" font-weight="700" fill="#00d4ff">A5</text>
+            <g id="filterGrid" opacity="0.4">
+              <line x1="22" y1="56" x2="148" y2="56" stroke="#00d4ff" stroke-width="0.7"/><line x1="22" y1="68" x2="148" y2="68" stroke="#00d4ff" stroke-width="0.7"/>
+              <line x1="22" y1="80" x2="148" y2="80" stroke="#00d4ff" stroke-width="0.7"/><line x1="22" y1="92" x2="148" y2="92" stroke="#00d4ff" stroke-width="0.7"/>
+              <line x1="40" y1="40" x2="40" y2="106" stroke="#00d4ff" stroke-width="0.7"/><line x1="58" y1="34" x2="58" y2="108" stroke="#00d4ff" stroke-width="0.7"/>
+              <line x1="85" y1="30" x2="85" y2="110" stroke="#00d4ff" stroke-width="0.7"/><line x1="112" y1="34" x2="112" y2="108" stroke="#00d4ff" stroke-width="0.7"/>
+              <line x1="130" y1="40" x2="130" y2="106" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <circle cx="85" cy="77" r="12" fill="#070f1e" stroke="url(#fg)" stroke-width="1.5"/>
+            <circle cx="85" cy="77" r="6" fill="url(#fg)"/>
+            <path d="M12 54 Q3 62 5 74" fill="none" stroke="rgba(0,212,255,0.35)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M158 54 Q167 62 165 74" fill="none" stroke="rgba(0,212,255,0.35)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="filter-pct-display" id="filterPct">72%</div>
+        <div class="filter-sublabel" id="filterLabel">GOOD PROTECTION</div>
+        <div class="filter-reason" id="filterReason">Auto mode — adjusting to AQI</div>
+      </div>
+
+      <div class="sec-label">OPERATING MODE</div>
+      <div class="mode-grid">
+        <div class="mode-btn active" onclick="setMode(this,'auto')">
+          <svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+          <div class="mode-btn-name">AUTO</div><div class="mode-btn-desc">ML-powered</div>
+        </div>
+        <div class="mode-btn" onclick="setMode(this,'manual')">
+          <svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="mode-btn-name">MANUAL</div><div class="mode-btn-desc">You decide</div>
+        </div>
+        <div class="mode-btn" onclick="setMode(this,'sport')">
+          <svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <div class="mode-btn-name">SPORT</div><div class="mode-btn-desc">High airflow</div>
+        </div>
+        <div class="mode-btn" onclick="setMode(this,'sleep')">
+          <svg class="mode-btn-icon" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round"><path d="M21 12.79A9 9 0 1115.21 7a7 7 0 005.79 5.79z"/></svg>
+          <div class="mode-btn-name">SLEEP</div><div class="mode-btn-desc">Silent mode</div>
+        </div>
+      </div>
+
+      <div class="slider-wrap" id="sliderWrap" style="display:none">
+        <input type="range" class="filter-slider" id="filterSlider" min="0" max="100" value="72" style="--fp:72%" oninput="onSlider(this)">
+        <div class="slider-labels"><span>OFF</span><span>BALANCED</span><span>MAX</span></div>
+      </div>
+
+      <!-- ML ENGINE PANEL -->
+      <div class="sec-label" style="margin-top:4px">ML ENGINE</div>
+      <div class="card" style="padding:14px">
+        <!-- Breathing — auto from PM2.5 -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round" width="15" height="15"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>
+            <div>
+              <div style="font-size:11px;font-weight:600;color:var(--text)">Breathing Rate</div>
+              <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace">AUTO · FROM PM2.5</div>
+            </div>
+          </div>
+          <div style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--glow)"><span id="breathVal">16</span> <span style="font-size:9px;color:var(--muted)">br/min</span></div>
+        </div>
+
+        <!-- Activity — user picks -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round" width="15" height="15"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <div>
+              <div style="font-size:11px;font-weight:600;color:var(--text)">Activity Level</div>
+              <div style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace">TAP TO CHANGE</div>
+            </div>
+          </div>
+          <div id="actLabel" style="font-size:9px;letter-spacing:1px;color:var(--purple);font-family:'Space Mono',monospace;font-weight:700">RESTING</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">
+          <div id="act0" onclick="setActivity(0)" style="padding:9px 4px;border-radius:10px;border:1px solid var(--glow);background:rgba(0,212,255,.08);cursor:pointer;text-align:center;transition:all .2s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.6" stroke-linecap="round" width="18" height="18" style="margin:0 auto 3px;display:block"><path d="M20.84 4.61a5.5 5.5 0 010 7.78L12 21.23l-8.84-8.84a5.5 5.5 0 017.78-7.78L12 5.62l1.06-1.01a5.5 5.5 0 017.78 0z"/></svg>
+            <div style="font-size:8px;letter-spacing:.5px;color:var(--glow);font-family:'Space Mono',monospace">REST</div>
+          </div>
+          <div id="act1" onclick="setActivity(1)" style="padding:9px 4px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;text-align:center;transition:all .2s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round" width="18" height="18" style="margin:0 auto 3px;display:block"><circle cx="12" cy="5" r="2"/><path d="M12 22V12m0 0l-3 3m3-3l3 3M9 12H3m6 0l-3-3M15 12h6m-6 0l3-3"/></svg>
+            <div style="font-size:8px;letter-spacing:.5px;color:var(--muted);font-family:'Space Mono',monospace">WALK</div>
+          </div>
+          <div id="act2" onclick="setActivity(2)" style="padding:9px 4px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;text-align:center;transition:all .2s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round" width="18" height="18" style="margin:0 auto 3px;display:block"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <div style="font-size:8px;letter-spacing:.5px;color:var(--muted);font-family:'Space Mono',monospace">RUN</div>
+          </div>
+        </div>
+
+        <!-- ML result line -->
+        <div style="display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:10px;background:var(--card2);border:1px solid var(--border)">
+          <div id="mlDot" style="width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .4s"></div>
+          <div id="mlResultText" style="font-size:10px;color:var(--muted2);font-family:'Space Mono',monospace;flex:1;letter-spacing:.3px">Waiting for AQI data...</div>
+        </div>
+      </div>
+
+      <div class="status-strip">
+        <div class="status-dot-green"></div>
+        <div class="status-text" id="esp32Status">Ready — tap to push ML result to Firebase & ESP32</div>
+      </div>
+      <button class="sync-btn" id="syncBtn" onclick="doSync()">⚡ PUSH TO MASK</button>
+
+      <div class="sec-label">FILTER STATUS</div>
+      <div class="stat-strip">
+        <div class="stat-box"><div class="stat-val" style="color:var(--green)">87%</div><div class="stat-key">LIFE LEFT</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--glow)">HEPA</div><div class="stat-key">GRADE</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">12d</div><div class="stat-key">REPLACE</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--glow2)" id="totalSyncs">0</div><div class="stat-key">SYNCS</div></div>
+      </div>
+    </div>
+
+    <!-- HEALTH -->
+    <div class="tab" id="tab-health">
+      <div class="card" style="text-align:center;padding:18px">
+        <div class="sec-label" style="justify-content:center">TODAY'S PROTECTION SCORE</div>
+        <div class="exposure-score">72</div>
+        <div class="exposure-label">PROTECTION EFFECTIVENESS</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted2)">AERO5 filtered 72% of harmful particles today</div>
+      </div>
+      <div class="exp-stats">
+        <div class="exp-stat"><div class="exp-stat-val" style="color:var(--green)">4.2h</div><div class="exp-stat-key">CLEAN AIR</div></div>
+        <div class="exp-stat"><div class="exp-stat-val" style="color:var(--amber)">1.8h</div><div class="exp-stat-key">MODERATE</div></div>
+        <div class="exp-stat"><div class="exp-stat-val" style="color:var(--red)">0.4h</div><div class="exp-stat-key">POOR AIR</div></div>
+      </div>
+      <div class="sec-label">AQI HISTORY</div>
+      <div class="card" style="padding:14px">
+        <div class="history-bars" id="historyBars"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px">
+          <span style="font-size:8px;color:var(--muted);font-family:'Space Mono',monospace">OLDEST</span>
+          <span style="font-size:8px;color:var(--muted);font-family:'Space Mono',monospace">LATEST</span>
+        </div>
+      </div>
+      <div class="sec-label">HEALTH PROFILE</div>
+      <div class="profile-grid">
+        <div class="profile-card active" onclick="setProfile(this,'HEALTHY')">
+          <svg class="profile-icon-svg" viewBox="0 0 36 36" fill="none" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"><path d="M18 3l14 5v9c0 8-6 14-14 17C10 31 4 25 4 17V8l14-5z"/><polyline points="12,18 16,22 24,14"/></svg>
+          <div class="profile-name">HEALTHY</div>
+        </div>
+        <div class="profile-card" onclick="setProfile(this,'ASTHMA')">
+          <svg class="profile-icon-svg" viewBox="0 0 36 36" fill="none" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"><path d="M18 8v14"/><path d="M18 8c0-3 3-5 6-4 4 1 7 5 7 10 0 7-4 11-8 11-2 0-3-1-5-3"/><path d="M18 8c0-3-3-5-6-4C8 5 5 9 5 14c0 7 4 11 8 11 2 0 3-1 5-3"/></svg>
+          <div class="profile-name">ASTHMA</div>
+        </div>
+        <div class="profile-card" onclick="setProfile(this,'ELDERLY')">
+          <svg class="profile-icon-svg" viewBox="0 0 36 36" fill="none" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"><polyline points="3,18 9,18 12,9 15,27 19,13 22,22 26,18 33,18"/></svg>
+          <div class="profile-name">ELDERLY</div>
+        </div>
+        <div class="profile-card" onclick="setProfile(this,'CHILD')">
+          <svg class="profile-icon-svg" viewBox="0 0 36 36" fill="none" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round"><circle cx="18" cy="12" r="5"/><path d="M6 32c0-7 5-12 12-12s12 5 12 12"/></svg>
+          <div class="profile-name">CHILD</div>
+        </div>
+      </div>
+      <div class="advice-card" id="adviceCard">
+        <div class="advice-header">
+          <div class="advice-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
+          </div>
+          <div><div class="advice-title" id="adviceTitle">Standard Protocol</div><div class="advice-sub" id="adviceSub">For healthy adults</div></div>
+        </div>
+        <div class="advice-items" id="adviceItems"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="tab" id="tab-settings">
+      <div class="about-card">
+        <div class="about-logo">AERO5</div>
+        <div class="about-ver">FIRMWARE v2.4.1 · APP v4.0.0</div>
+        <div class="about-divider"></div>
+        <div class="about-stats">
+          <div class="about-stat"><div class="about-stat-val" id="totalSyncs2">0</div><div class="about-stat-key">TOTAL SYNCS</div></div>
+          <div class="about-stat"><div class="about-stat-val" id="uptimeDisplay">0m</div><div class="about-stat-key">SESSION TIME</div></div>
+        </div>
+      </div>
+
+      <div class="sec-label">SYNC & DATA</div>
+      <div class="settings-group">
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></div><div><div class="setting-title">Background Sync</div><div class="setting-sub">Firebase every 15 seconds</div></div></div>
+          <div class="setting-val on">ACTIVE</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg></div><div><div class="setting-title">Firebase Region</div><div class="setting-sub">asia-southeast1</div></div></div>
+          <div class="setting-val">CONNECTED</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><path d="M1 6s5-2 11-2 11 2 11 2"/><path d="M5 12s3-1 7-1 7 1 7 1"/><path d="M9 18s1-.5 3-.5 3 .5 3 .5"/><line x1="12" y1="20" x2="12" y2="22"/></svg></div><div><div class="setting-title">WAQI API</div><div class="setting-sub">Real-time air quality feed</div></div></div>
+          <div class="setting-val on" id="waqiStatus">LIVE</div>
+        </div>
+      </div>
+
+      <div class="sec-label">ALERTS</div>
+      <div class="settings-group">
+        <div class="toggle-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div><div class="setting-title">AQI Alerts</div><div class="setting-sub">Notify when AQI exceeds 150</div></div></div>
+          <label class="toggle-wrap"><input type="checkbox" class="toggle-input" id="alertToggle" checked onchange="onAlertToggle(this)"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="setting-title">Alert Threshold</div><div class="setting-sub">Unhealthy level trigger</div></div></div>
+          <div class="setting-val warn">AQI 150</div>
+        </div>
+      </div>
+
+      <div class="sec-label">DEVICE</div>
+      <div class="settings-group">
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div><div><div class="setting-title">GPS Location</div><div class="setting-sub" id="settingsGPS">Detecting...</div></div></div>
+          <div class="setting-val on">ON</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div><div><div class="setting-title">Filter Life</div><div class="setting-sub">Replace in ~12 days</div></div></div>
+          <div class="setting-val warn">87%</div>
+        </div>
+      </div>
+
+      <div class="sec-label">CONNECTED MASK</div>
+      <div class="settings-group">
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="setting-title">Mask ID</div><div class="setting-sub" id="settingsMaskId">--</div></div></div>
+          <div class="setting-val on">AUTH ✓</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg></div><div><div class="setting-title">ESP32 Chip</div><div class="setting-sub">240MHz dual-core</div></div></div>
+          <div class="setting-val">READY</div>
+        </div>
+      </div>
+
+      <button class="logout-btn" onclick="doLogout()">DISCONNECT MASK</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV — SVG icons, no emoji -->
+  <div class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+      <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="var(--glow)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="nav-label">HOME</div>
+    </div>
+    <div class="nav-item" id="nav-mask" onclick="switchTab('mask')">
+      <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round" id="svgMask"><path d="M12 2L4 6v5c0 5.25 3.5 10.15 8 11.4C16.5 21.15 20 16.25 20 11V6l-8-4z"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+      <div class="nav-label">MASK</div>
+    </div>
+    <div class="nav-item" id="nav-health" onclick="switchTab('health')">
+      <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round" id="svgHealth"><polyline points="3 12 6 12 8 6 11 18 13 10 16 14 18 12 21 12"/></svg>
+      <div class="nav-label">HEALTH</div>
+    </div>
+    <div class="nav-item" id="nav-settings" onclick="switchTab('settings')">
+      <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round" id="svgSettings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <div class="nav-label">SETTINGS</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+'use strict';
+const WAQI_TOKEN='4b32727b0be6942e1a3d537378d22c6b1ee8d5eb';
+const REFRESH_MS=5*60*1000;
+const ALERT_THRESHOLD=150;
+const LEVELS=[
+  {max:50, label:'Good',                  color:'#00ffb3',bg:'rgba(0,255,179,.09)',  seg:0,filter:20,msg:'Air quality excellent. AERO5 minimal filtration active.',adv:{title:'Excellent Air Quality',desc:'Safe for all activities. AERO5 operating at minimal power.'}},
+  {max:100,label:'Moderate',              color:'#a8e063',bg:'rgba(168,224,99,.08)', seg:1,filter:45,msg:'Acceptable air quality. AERO5 light filtration engaged.',adv:{title:'Moderate Conditions',desc:'Sensitive people should reduce prolonged outdoor exertion.'}},
+  {max:150,label:'Unhealthy for Sensitive',color:'#f59e0b',bg:'rgba(245,158,11,.08)',seg:2,filter:65,msg:'Sensitive groups at risk. AERO5 elevated filtration active.',adv:{title:'Sensitive Groups At Risk',desc:'People with respiratory/heart disease should limit outdoor exertion.'}},
+  {max:200,label:'Unhealthy',             color:'#f97316',bg:'rgba(249,115,22,.08)', seg:3,filter:80,msg:'Health effects likely for everyone. AERO5 high-protection mode.',adv:{title:'Unhealthy — Wear Mask',desc:'Everyone may experience effects. Sensitive groups should avoid outdoors.'}},
+  {max:300,label:'Very Unhealthy',        color:'#f43f5e',bg:'rgba(244,63,94,.09)',  seg:4,filter:92,msg:'Health alert: serious effects for everyone. AERO5 near-MAX filtration.',adv:{title:'Health Alert — Stay Indoors',desc:'Avoid outdoor exertion. AERO5 maximum filtration recommended.'}},
+  {max:500,label:'Hazardous',             color:'#7c3aed',bg:'rgba(124,58,237,.1)',  seg:5,filter:100,msg:'Emergency conditions. AERO5 MAX PROTECTION activated.',adv:{title:'HAZARDOUS — Emergency Mode',desc:'Avoid all outdoor activity. AERO5 MAX protection active.'}}
+];
+function getLevel(a){return LEVELS.find(l=>a<=l.max)||LEVELS[5];}
+const PS={
+  pm25:v=>v<=12?'Good':v<=35?'Moderate':v<=55?'Unhealthy·S':v<=150?'Unhealthy':'V. Unhealthy',
+  pm10:v=>v<=54?'Good':v<=154?'Moderate':v<=254?'Unhealthy·S':v<=354?'Unhealthy':'V. Unhealthy',
+  no2: v=>v<=53?'Good':v<=100?'Moderate':v<=360?'Unhealthy·S':'Unhealthy',
+  o3:  v=>v<=54?'Good':v<=70?'Moderate':v<=85?'Unhealthy·S':'Unhealthy'
+};
+const HP={
+  HEALTHY:{title:'Standard Protocol',sub:'For healthy adults',items:['AERO5 activates enhanced filtration above AQI 100','Outdoor exercise safe below AQI 150','Stay hydrated — reduces respiratory irritation','Monitor PM2.5 — key lung health indicator']},
+  ASTHMA: {title:'Asthma Protocol — High Alert',sub:'Enhanced sensitivity settings',items:['AERO5 activates high filtration above AQI 75','Keep rescue inhaler accessible at all times','Avoid outdoor activity above AQI 100','Valve response reduced to 0.3s for rapid protection']},
+  ELDERLY:{title:'Senior Care Mode',sub:'Low-resistance breathing',items:['Cardiovascular strain risk above AQI 80 — limit exertion','Low-resistance breathing mode reduces fatigue','Enhanced PM2.5 capture active','Stay indoors when AQI exceeds 120']},
+  CHILD:  {title:'Child Safe Mode — Maximum Safety',sub:'Strictest protection protocol',items:['AERO5 activates at AQI 50 — developing lungs most vulnerable','No outdoor play above AQI 100','Notifications enabled for any AQI increase','Developing lungs 20% more susceptible to PM2.5']}
+};
+let MASK_ID='',curAQI=0,curFilter=72,curMode='auto',curChannel='Firebase';
+let lastSentTime=0,lastSentAQI=-1,syncCount=0,sessionStart=Date.now();
+let forecastBuilt=false,aqiHistory=[],alertsEnabled=true,alertLastAQI=-999;
+
+// ── ML STATE ──
+const ML_URL='https://aero5-ml.onrender.com/predict';
+let curBreathing=16; // auto-derived from PM2.5
+let curActivity=0;   // 0=resting 1=walking 2=running
+let mlDebounce=null;
+let lastMlAqi=-1;
+let rawPollutants=null;
+
+firebase.initializeApp({apiKey:"AIzaSyCIdsdP-jIExaxL2kD8-I2xhtXJC3lKTcY",authDomain:"aero5-886bf.firebaseapp.com",databaseURL:"https://aero5-886bf-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"aero5-886bf",storageBucket:"aero5-886bf.firebasestorage.app",messagingSenderId:"102272511608",appId:"1:102272511608:web:2de96d5da2824abdd4078d"});
+const db=firebase.database();
+function ab(a,d){try{if(window.AndroidBridge)window.AndroidBridge.onEvent(a,JSON.stringify(d||{}));}catch(e){}}
+
+// ── Human-readable filtration label ──
+function filterHumanLabel(p){
+  if(p<=20) return 'LIGHT FILTRATION';
+  if(p<=45) return 'MODERATE PROTECTION';
+  if(p<=65) return 'GOOD PROTECTION';
+  if(p<=80) return 'STRONG PROTECTION';
+  if(p<=92) return 'HIGH PROTECTION';
+  return 'MAX PROTECTION';
+}
+
+// SPLASH
+const sp=['LOADING MODULES...','CONNECTING FIREBASE...','READY'];let si=0;
+const st=setInterval(()=>{document.getElementById('splashStatus').textContent=sp[si++];if(si>=sp.length)clearInterval(st);},600);
+setTimeout(()=>{const s=document.getElementById('splashScreen');s.classList.add('out');setTimeout(()=>{s.style.display='none';const sv=localStorage.getItem('aero5_session');if(sv){try{const{id}=JSON.parse(sv);MASK_ID=id;launchApp();}catch(e){showLogin();}}else showLogin();},600);},2200);
+
+function showLogin(){document.getElementById('loginScreen').style.display='flex';}
+async function doLogin(){
+  const id=document.getElementById('maskId').value.trim();
+  const key=document.getElementById('maskKey').value.trim();
+  const err=document.getElementById('loginErr');const btn=document.getElementById('loginBtn');
+  err.textContent='';
+  if(!id||!key){err.textContent='ENTER MASK ID AND KEY';return;}
+  btn.textContent='VERIFYING...';btn.disabled=true;
+  try{
+    const snap=await db.ref('masks/'+id).get();
+    if(!snap.exists()){err.textContent='MASK NOT FOUND';btn.textContent='CONNECT MASK';btn.disabled=false;return;}
+    if(snap.val().key!==key){err.textContent='INVALID KEY';btn.textContent='CONNECT MASK';btn.disabled=false;return;}
+    MASK_ID=id;localStorage.setItem('aero5_session',JSON.stringify({id}));launchApp();
+  }catch(e){err.textContent='CONNECTION ERROR';btn.textContent='CONNECT MASK';btn.disabled=false;}
+}
+function launchApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='flex';
+  document.getElementById('maskIdBadge').textContent=MASK_ID;
+  document.getElementById('settingsMaskId').textContent=MASK_ID;
+  ab('LOGIN',{maskId:MASK_ID});initApp();
+}
+
+// TABS
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  ['svgMask','svgHealth','svgSettings'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('stroke','var(--muted)');});
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  const svgMap={mask:'svgMask',health:'svgHealth',settings:'svgSettings'};
+  if(svgMap[name]){const el=document.getElementById(svgMap[name]);if(el)el.setAttribute('stroke','var(--glow)');}
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+// ALERTS
+function onAlertToggle(el){alertsEnabled=el.checked;ab('ALERT_TOGGLE',{enabled:alertsEnabled});}
+function showNotif(title,body){
+  document.getElementById('notifTitle').textContent=title;
+  document.getElementById('notifBody').textContent=body;
+  const t=document.getElementById('notifToast');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),5000);
+  ab('SHOW_NOTIFICATION',{title,body});
+  if(typeof Notification!=='undefined'){
+    if(Notification.permission==='granted') new Notification('AERO5 — '+title,{body,tag:'aqi'});
+    else if(Notification.permission!=='denied') Notification.requestPermission().then(p=>{if(p==='granted')new Notification('AERO5 — '+title,{body,tag:'aqi'});});
+  }
+}
+function checkAlert(aqi){
+  if(!alertsEnabled||aqi<ALERT_THRESHOLD) return;
+  if(aqi===alertLastAQI) return;
+  if(alertLastAQI<ALERT_THRESHOLD||aqi-alertLastAQI>=20){
+    alertLastAQI=aqi;
+    const lv=getLevel(aqi);
+    showNotif('AQI Alert: '+lv.label,'Current AQI is '+aqi+'. '+lv.adv.desc+' Filter: '+lv.filter+'%.');
+  }
+}
+
+// APPLY AQI
+function applyAQI(aqi,city,lat,lon,p,fc){
+  curAQI=parseInt(aqi);
+  rawPollutants=p;
+  const lv=getLevel(curAQI);
+  document.getElementById('aqiNum').textContent=curAQI;
+  document.getElementById('aqiNum').style.color=lv.color;
+  document.getElementById('aqiArc').style.strokeDashoffset=301.6*(1-Math.min(curAQI/300,1));
+  document.getElementById('aqiArc').style.stroke=lv.color;
+  document.getElementById('aqiCat').textContent=lv.label;
+  document.getElementById('aqiCat').style.color=lv.color;
+  document.getElementById('aqiMsg').textContent=lv.msg;
+  document.getElementById('heroBg').style.background='radial-gradient(circle,'+lv.bg+' 0%,transparent 70%)';
+  const pill=document.getElementById('livePill');
+  pill.style.color=lv.color;pill.style.borderColor=lv.color+'44';pill.style.background=lv.bg;
+  for(let i=0;i<=5;i++) document.getElementById('s'+i).classList.toggle('lit',i<=lv.seg);
+  if(city) document.getElementById('locCity').textContent=city;
+  document.getElementById('locDetail').textContent=lat.toFixed(4)+'N · '+lon.toFixed(4)+'E';
+  document.getElementById('settingsGPS').textContent=lat.toFixed(4)+'N, '+lon.toFixed(4)+'E';
+  document.getElementById('lastUpdate').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const ban=document.getElementById('alertBanner');
+  if(curAQI>150){ban.classList.add('show');document.getElementById('alertText').textContent=curAQI>200?'Dangerous AQI '+curAQI+'! AERO5 MAX protection. Avoid all outdoor exposure.':'AQI '+curAQI+' — Unhealthy. AERO5 boosted filtration active.';}
+  else ban.classList.remove('show');
+  // In AUTO mode: ML will set curFilter — only set AQI-based if ML hasn't run yet
+  if(curMode==='auto'&&lastMlAqi===-1){curFilter=lv.filter;renderFilter(curFilter);document.getElementById('filterReason').textContent='Auto mode — AQI '+curAQI+' → '+lv.filter+'%';}
+  document.getElementById('advisoryTitle').textContent=lv.adv.title;
+  document.getElementById('advisoryDesc').textContent=lv.adv.desc;
+  applyPollutants(curAQI,p);
+  aqiHistory.push(curAQI);if(aqiHistory.length>8)aqiHistory.shift();renderHistory();
+  if(!forecastBuilt){buildForecast(curAQI,fc);forecastBuilt=true;}else updateFcNow(curAQI,lv);
+  checkAlert(curAQI);
+  ab('AQI_UPDATE',{aqi:curAQI,filter:curFilter});
+
+  // ── DERIVE BREATHING FROM PM2.5 THEN CALL ML ──
+  const pm25val=(p&&p.pm25!=null)?p.pm25:Math.round(curAQI*.18+5);
+  curBreathing=Math.round(Math.max(12,Math.min(40,12+(Math.min(pm25val,300)/300)*28)));
+  const bEl=document.getElementById('breathVal');if(bEl)bEl.textContent=curBreathing;
+  scheduleMlCall();
+}
+
+function applyPollutants(aqi,p){
+  const pm25=(p&&p.pm25!=null)?p.pm25:Math.round(aqi*.18+5);
+  const pm10=(p&&p.pm10!=null)?p.pm10:Math.round(aqi*.28+8);
+  const no2=(p&&p.no2!=null)?p.no2:Math.round(aqi*.12+3);
+  const o3=(p&&p.o3!=null)?p.o3:Math.round(aqi*.09+4);
+  document.getElementById('statPm25').textContent=pm25;
+  document.getElementById('statPm10').textContent=pm10;
+  document.getElementById('statNo2').textContent=no2;
+  document.getElementById('statO3').textContent=o3;
+  setP('pm25',pm25,150,PS.pm25(pm25));setP('pm10',pm10,300,PS.pm10(pm10));
+  setP('no2',no2,200,PS.no2(no2));setP('o3',o3,150,PS.o3(o3));
+}
+function setP(id,val,max,status){
+  document.getElementById(id+'val').textContent=val;
+  document.getElementById(id+'status').textContent=status;
+  document.getElementById(id+'bar').style.width=Math.min(100,val/max*100)+'%';
+}
+
+// ── FILTER DISPLAY ──
+function renderFilter(p){
+  document.getElementById('filterPct').textContent=p+'%';
+  const lbl=document.getElementById('filterLabel');
+  if(lbl) lbl.textContent=filterHumanLabel(p);
+  const s=document.getElementById('filterSlider');if(s){s.value=p;s.style.setProperty('--fp',p+'%');}
+  const grid=document.getElementById('filterGrid');
+  if(grid) grid.setAttribute('opacity',0.15+(p/100)*0.85);
+  // Update protection score
+  const score=Math.min(99,Math.round(p*0.85+15));
+  const ps=document.getElementById('protectScore');if(ps)ps.textContent=score;
+  const pb=document.getElementById('protectBar');if(pb)pb.style.width=score+'%';
+  const pt=document.getElementById('protectText');if(pt)pt.textContent='AERO5 filtered ~'+score+'% of harmful particles today';
+}
+
+function onSlider(el){
+  curFilter=parseInt(el.value);
+  el.style.setProperty('--fp',curFilter+'%');
+  document.getElementById('filterPct').textContent=curFilter+'%';
+  const lbl=document.getElementById('filterLabel');if(lbl)lbl.textContent=filterHumanLabel(curFilter);
+  document.getElementById('filterReason').textContent='Manual: '+curFilter+'% — '+filterHumanLabel(curFilter);
+  renderFilter(curFilter);
+  // Manual mode: push to Firebase immediately
+  pushToFirebase(curAQI,curFilter,curBreathing,curActivity,curFilter,curFilter,0,'Manual','Manual override');
+}
+
+function setMode(btn,m){
+  document.querySelectorAll('.mode-btn').forEach(b=>{b.classList.remove('active');const s=b.querySelector('svg');if(s)s.setAttribute('stroke','var(--muted)');});
+  btn.classList.add('active');const s=btn.querySelector('svg');if(s)s.setAttribute('stroke','var(--glow)');
+  curMode=m;
+  document.getElementById('sliderWrap').style.display=m==='manual'?'block':'none';
+  if(m==='auto'&&curAQI){
+    // Re-call ML when switching back to auto
+    scheduleMlCall();
+  } else if(m==='sport'){
+    curFilter=85;renderFilter(85);
+    document.getElementById('filterReason').textContent='Sport mode — high airflow, 85%';
+    pushToFirebase(curAQI,85,curBreathing,curActivity,85,85,0,'Sport','Sport mode active');
+  } else if(m==='sleep'){
+    curFilter=55;renderFilter(55);
+    document.getElementById('filterReason').textContent='Sleep mode — silent, 55%';
+    pushToFirebase(curAQI,55,curBreathing,curActivity,55,55,0,'Sleep','Sleep mode active');
+  }
+}
+
+// ── ML ──
+function scheduleMlCall(){if(mlDebounce)clearTimeout(mlDebounce);mlDebounce=setTimeout(callML,400);}
+
+function setActivity(level){
+  curActivity=level;
+  const labels=['RESTING','WALKING','RUNNING'];
+  const el=document.getElementById('actLabel');if(el)el.textContent=labels[level];
+  [0,1,2].forEach(i=>{
+    const btn=document.getElementById('act'+i);if(!btn)return;
+    const active=i===level;
+    btn.style.borderColor=active?'var(--glow)':'var(--border)';
+    btn.style.background=active?'rgba(0,212,255,.08)':'transparent';
+    const svg=btn.querySelector('svg');if(svg)svg.setAttribute('stroke',active?'var(--glow)':'var(--muted)');
+    const lbl=btn.querySelector('div');if(lbl)lbl.style.color=active?'var(--glow)':'var(--muted)';
+  });
+  scheduleMlCall();
+}
+
+async function callML(){
+  if(!curAQI||curAQI<=0) return;
+  const dot=document.getElementById('mlDot');
+  const txt=document.getElementById('mlResultText');
+  if(dot) dot.style.background='var(--amber)';
+  if(txt) txt.textContent='ML engine running...';
+  try{
+    // GET /predict?aqi=X&breathing=Y&activity=Z  (your actual API params)
+    const url=`${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const d=await res.json();
+    // Values come as strings like "72.50%"
+    const eff=parseFloat(d.effective_filtration);
+    const penalty=parseFloat(d.breathing_penalty);
+    const raw=parseFloat(d.protection_raw);
+    const warning=d.warning||'Normal';
+    const advice=d.advice||'Safe';
+    if(isNaN(eff)) throw new Error('Bad ML response: '+JSON.stringify(d));
+
+    // Only update filter in auto mode
+    if(curMode==='auto'){
+      curFilter=Math.round(eff);
+      renderFilter(curFilter);
+      const actLabels=['Resting','Walking','Running'];
+      document.getElementById('filterReason').textContent=
+        'ML: AQI '+curAQI+' · '+curBreathing+' br/min · '+actLabels[curActivity]+' → '+curFilter+'%';
+    }
+    if(dot) dot.style.background=warning==='Normal'?'var(--green)':'var(--red)';
+    if(txt) txt.textContent='Effective: '+eff.toFixed(1)+'% · Penalty: '+penalty.toFixed(1)+'% · '+warning+' — '+advice;
+    lastMlAqi=curAQI;
+    ab('AQI_UPDATE',{aqi:curAQI,filter:curFilter});
+    // Push to Firebase — always, regardless of mode
+    await pushToFirebase(curAQI,curFilter,curBreathing,curActivity,eff,raw,penalty,warning,advice);
+  }catch(e){
+    if(dot) dot.style.background='var(--red)';
+    if(txt) txt.textContent='ML unreachable — using AQI fallback';
+    const lv=getLevel(curAQI);
+    if(curMode==='auto'){curFilter=lv.filter;renderFilter(curFilter);document.getElementById('filterReason').textContent='Fallback: AQI '+curAQI+' → '+lv.filter+'%';}
+    await autoFB(curAQI,curFilter);
+    console.warn('ML error:',e);
+  }
+}
+
+// ── FIREBASE PUSH — full ML payload ──
+async function pushToFirebase(aqi,filter,breathing,activity,effectiveFiltration,rawProtection,penalty,warning,advice){
+  if(!MASK_ID) return;
+  try{
+    await db.ref('masks/'+MASK_ID).update({
+      aqi,filter,
+      breathing_rate:       breathing,
+      activity_level:       activity,
+      effective_filtration: Math.round(effectiveFiltration*10)/10,
+      protection_raw:       Math.round((rawProtection||effectiveFiltration)*10)/10,
+      breathing_penalty:    Math.round(penalty*10)/10,
+      ml_warning:           warning,
+      ml_advice:            advice,
+      timestamp:            new Date().toISOString(),
+      source:               'ml_auto'
+    });
+    syncCount++;
+    document.getElementById('totalSyncs').textContent=syncCount;
+    document.getElementById('totalSyncs2').textContent=syncCount;
+    document.getElementById('esp32Status').textContent=
+      'Firebase updated — AQI:'+aqi+' · Filter:'+Math.round(effectiveFiltration)+'% · Breathing:'+breathing+' br/min';
+  }catch(e){
+    document.getElementById('esp32Status').textContent='Firebase sync failed — check connection';
+  }
+}
+
+async function autoFB(aqi,filter){
+  if(!MASK_ID) return;
+  const now=Date.now();if(now-lastSentTime<15000) return;if(aqi===lastSentAQI) return;
+  try{
+    await db.ref('masks/'+MASK_ID).update({aqi,filter,timestamp:new Date().toISOString(),source:'auto'});
+    lastSentTime=now;lastSentAQI=aqi;syncCount++;
+    document.getElementById('totalSyncs').textContent=syncCount;
+    document.getElementById('totalSyncs2').textContent=syncCount;
+  }catch(e){}
+}
+
+// ── MANUAL SYNC BUTTON — calls ML then Firebase ──
+async function doSync(){
+  const btn=document.getElementById('syncBtn');
+  btn.textContent='CALLING ML...';btn.disabled=true;
+  let mlPayload={};
+  try{
+    const url=`${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
+    const res=await fetch(url);
+    if(res.ok){
+      const d=await res.json();
+      const eff=parseFloat(d.effective_filtration);
+      const penalty=parseFloat(d.breathing_penalty);
+      const raw=parseFloat(d.protection_raw);
+      if(!isNaN(eff)){
+        if(curMode==='auto'){curFilter=Math.round(eff);renderFilter(curFilter);}
+        const actLabels=['Resting','Walking','Running'];
+        document.getElementById('filterReason').textContent='ML sync — '+actLabels[curActivity]+' → '+Math.round(eff)+'%';
+        const dot=document.getElementById('mlDot');if(dot)dot.style.background=d.warning==='Normal'?'var(--green)':'var(--red)';
+        const txt=document.getElementById('mlResultText');if(txt)txt.textContent='Effective: '+eff.toFixed(1)+'% · Penalty: '+penalty.toFixed(1)+'% · '+d.warning+' — '+d.advice;
+        mlPayload={breathing_rate:curBreathing,activity_level:curActivity,effective_filtration:Math.round(eff*10)/10,protection_raw:isNaN(raw)?0:Math.round(raw*10)/10,breathing_penalty:Math.round(penalty*10)/10,ml_warning:d.warning,ml_advice:d.advice};
+      }
+    }
+  }catch(e){console.warn('ML failed in doSync:',e);}
+  btn.textContent='PUSHING TO FIREBASE...';
+  try{
+    await db.ref('masks/'+MASK_ID).update({aqi:curAQI,filter:curFilter,mode:curMode,timestamp:new Date().toISOString(),source:'manual_sync',...mlPayload});
+    syncCount++;
+    document.getElementById('totalSyncs').textContent=syncCount;
+    document.getElementById('totalSyncs2').textContent=syncCount;
+    btn.textContent='PUSHED ✓';
+    document.getElementById('esp32Status').textContent='Firebase updated — AQI:'+curAQI+' · Filter:'+curFilter+'% · ML:'+((mlPayload.ml_warning)||'—');
+    ab('SYNC',{aqi:curAQI,filter:curFilter});
+  }catch(e){btn.textContent='FAILED ✕';document.getElementById('esp32Status').textContent='Firebase failed — check connection';}
+  btn.disabled=false;
+  setTimeout(()=>btn.textContent='⚡ PUSH TO MASK',2500);
+}
+
+// HEALTH PROFILE
+function setProfile(btn,key){
+  document.querySelectorAll('.profile-card').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  const p=HP[key];
+  document.getElementById('adviceTitle').textContent=p.title;
+  document.getElementById('adviceSub').textContent=p.sub;
+  document.getElementById('adviceItems').innerHTML=p.items.map(t=>`<div class="advice-item"><svg class="advice-item-icon" viewBox="0 0 24 24" fill="none" stroke="var(--glow2)" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><div class="advice-item-text">${t}</div></div>`).join('');
+}
+setProfile(document.querySelector('.profile-card.active'),'HEALTHY');
+
+// FORECAST
+function buildForecast(currentAqi,fc){
+  const row=document.getElementById('forecastRow');row.innerHTML='';
+  const lv=getLevel(currentAqi);
+  const now=document.createElement('div');now.className='fc now';now.id='fcNow';
+  now.innerHTML='<div class="fc-time">NOW</div><div class="fc-aqi" style="color:'+lv.color+'">'+currentAqi+'</div><div class="fc-cat" style="color:'+lv.color+'">'+lv.label.split(' ')[0]+'</div><div class="fc-max" style="color:'+lv.color+'">live</div>';
+  row.appendChild(now);
+  if(fc&&fc.pm25&&fc.pm25.length>0){
+    const today=new Date().toISOString().split('T')[0];
+    fc.pm25.filter(d=>d.day>=today).slice(0,7).forEach((slot,i)=>{
+      const date=new Date(slot.day+'T12:00:00');
+      const label=i===0?'Today':date.toLocaleDateString('en',{weekday:'short'});
+      const avgLv=getLevel(slot.avg);const maxLv=getLevel(slot.max);
+      const el=document.createElement('div');el.className='fc';
+      el.innerHTML='<div class="fc-time">'+label+'</div><div class="fc-aqi" style="color:'+avgLv.color+'">'+slot.avg+'</div><div class="fc-cat" style="color:'+avgLv.color+'">'+avgLv.label.split(' ')[0]+'</div><div class="fc-max" style="color:'+maxLv.color+'">max '+slot.max+'</div>';
+      row.appendChild(el);
+    });
+  }else{
+    const trend=(Math.random()-.5)*40;
+    [{l:'1h',h:1},{l:'2h',h:2},{l:'4h',h:4},{l:'6h',h:6},{l:'8h',h:8},{l:'12h',h:12},{l:'24h',h:24}].forEach(s=>{
+      const a=Math.max(15,Math.min(300,currentAqi+Math.round(trend*(s.h/24)+(Math.random()-.5)*5)));
+      const lv2=getLevel(a);const el=document.createElement('div');el.className='fc';
+      el.innerHTML='<div class="fc-time">'+s.l+'</div><div class="fc-aqi" style="color:'+lv2.color+'">'+a+'</div><div class="fc-cat" style="color:'+lv2.color+'">'+lv2.label.split(' ')[0]+'</div><div class="fc-max">—</div>';
+      row.appendChild(el);
+    });
+  }
+}
+function updateFcNow(aqi,lv){
+  const el=document.getElementById('fcNow');if(!el) return;
+  el.querySelector('.fc-aqi').textContent=aqi;el.querySelector('.fc-aqi').style.color=lv.color;
+  el.querySelector('.fc-cat').textContent=lv.label.split(' ')[0];el.querySelector('.fc-cat').style.color=lv.color;
+}
+
+// HISTORY
+function renderHistory(){
+  const wrap=document.getElementById('historyBars');if(!aqiHistory.length){wrap.innerHTML='';return;}
+  const max=Math.max(...aqiHistory,100);
+  wrap.innerHTML=aqiHistory.map((a,i)=>{
+    const lv=getLevel(a);const h=Math.max(6,Math.round((a/max)*52));const last=i===aqiHistory.length-1;
+    return '<div class="h-bar-wrap"><div class="h-bar" style="height:'+h+'px;background:'+lv.color+';opacity:'+(last?1:.55)+';'+(last?'box-shadow:0 0 8px '+lv.color+'88':'')+'\"></div><div class="h-bar-label">'+a+'</div></div>';
+  }).join('');
+}
+
+// LOGOUT
+function doLogout(){MASK_ID='';forecastBuilt=false;aqiHistory=[];alertLastAQI=-999;lastMlAqi=-1;localStorage.removeItem('aero5_session');document.getElementById('appScreen').style.display='none';document.getElementById('loginScreen').style.display='flex';ab('LOGOUT',{});}
+
+// UPTIME
+setInterval(()=>{const m=Math.floor((Date.now()-sessionStart)/60000);const h=Math.floor(m/60);document.getElementById('uptimeDisplay').textContent=h>0?h+'h '+(m%60)+'m':m+'m';},10000);
+
+// WAQI FETCH
+async function fetchAQI(lat,lon){
+  const res=await fetch('https://api.waqi.info/feed/geo:'+lat+';'+lon+'/?token='+WAQI_TOKEN);
+  const d=await res.json();
+  if(d.status!=='ok') throw new Error(d.status);
+  const data=d.data;
+  const aqi=parseInt(data.aqi);
+  const city=data.city&&data.city.name?data.city.name:'Your Location';
+  const iaqi=data.iaqi||{};
+  const p={pm25:iaqi.pm25?iaqi.pm25.v:null,pm10:iaqi.pm10?iaqi.pm10.v:null,no2:iaqi.no2?iaqi.no2.v:null,o3:iaqi.o3?iaqi.o3.v:null};
+  const fc=data.forecast&&data.forecast.daily?data.forecast.daily:null;
+  document.getElementById('waqiStatus').textContent='LIVE';
+  applyAQI(aqi,city,lat,lon,p,fc);
+}
+
+function initApp(){
+  renderFilter(72);renderHistory();
+  if(!navigator.geolocation){fetchAQI(30.9,75.8).catch(()=>applyAQI(130,'Ludhiana, Punjab',30.9,75.8,null,null));return;}
+  navigator.geolocation.getCurrentPosition(
+    async pos=>{
+      const lat=pos.coords.latitude,lon=pos.coords.longitude;
+      try{await fetchAQI(lat,lon);}catch(e){applyAQI(130,'Your Location',lat,lon,null,null);}
+      setInterval(async()=>{
+        navigator.geolocation.getCurrentPosition(async p=>{try{await fetchAQI(p.coords.latitude,p.coords.longitude);}catch(e){}},null,{enableHighAccuracy:false,timeout:5000});
+      },REFRESH_MS);
+    },
+    ()=>fetchAQI(30.9,75.8).catch(()=>applyAQI(130,'Ludhiana, Punjab',30.9,75.8,null,null)),
+    {enableHighAccuracy:true,timeout:8000,maximumAge:60000}
+  );
+}
+</script>
+</body>
+</html>

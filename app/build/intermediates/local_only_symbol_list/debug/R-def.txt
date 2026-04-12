@@ -1,12 +1,17 @@
 R_DEF: Internal format may change without notice
 local
-color bg_dark
+color amber
+color bg
+color card
 color glow
 color green
+color purple
+color red
 color white
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+string channel_name
 string firebase_database_url
 string gcm_defaultSenderId
 string google_api_key
@@ -17,4 +22,5 @@ string project_id
 style Theme.AERO5
 style Theme.AERO5.Splash
 xml backup_rules
+xml file_paths
 xml network_security_config

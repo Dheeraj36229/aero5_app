@@ -20,6 +20,10 @@
         "source": "com.aero5.mask.app-main-47:/mipmap-hdpi/ic_launcher.png"
     },
     {
+        "merged": "com.aero5.mask.app-merged_res-45:/xml_file_paths.xml.flat",
+        "source": "com.aero5.mask.app-main-47:/xml/file_paths.xml"
+    },
+    {
         "merged": "com.aero5.mask.app-merged_res-45:/mipmap-hdpi_ic_launcher_round.png.flat",
         "source": "com.aero5.mask.app-main-47:/mipmap-hdpi/ic_launcher_round.png"
     },

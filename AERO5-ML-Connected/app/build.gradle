@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.aero5.mask'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.aero5.mask"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.webkit:webkit:1.10.0'
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Firebase BOM
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // WorkManager for background tasks
+    implementation 'androidx.work:work-runtime:2.9.0'
+
+    // Location services
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
+}

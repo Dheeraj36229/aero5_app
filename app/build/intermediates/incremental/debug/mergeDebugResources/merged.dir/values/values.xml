@@ -636,13 +636,14 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
+    <color name="amber">#ffb800</color>
     <color name="androidx_core_ripple_material_light">#1f000000</color>
     <color name="androidx_core_secondary_text_default_material_light">#8a000000</color>
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@android:color/white</color>
     <color name="background_material_dark">@color/material_grey_850</color>
     <color name="background_material_light">@color/material_grey_50</color>
-    <color name="bg_dark">#050A14</color>
+    <color name="bg">#070b14</color>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
     <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light</color>
@@ -653,6 +654,7 @@
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="call_notification_answer_color">#1d873b</color>
     <color name="call_notification_decline_color">#d93025</color>
+    <color name="card">#111827</color>
     <color name="cardview_dark_background">#FF424242</color>
     <color name="cardview_light_background">#FFFFFFFF</color>
     <color name="cardview_shadow_end_color">#03000000</color>
@@ -708,8 +710,8 @@
     <color name="error_color_material_light">#ff5722</color>
     <color name="foreground_material_dark">@android:color/white</color>
     <color name="foreground_material_light">@android:color/black</color>
-    <color name="glow">#00C2FF</color>
-    <color name="green">#00FFAA</color>
+    <color name="glow">#00c8ff</color>
+    <color name="green">#00ff9d</color>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="m3_ref_palette_black">#ff000000</color>
@@ -959,6 +961,8 @@
     <color name="primary_text_default_material_light">#de000000</color>
     <color name="primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="primary_text_disabled_material_light">#39000000</color>
+    <color name="purple">#a855f7</color>
+    <color name="red">#ff4d6d</color>
     <color name="ripple_material_dark">#33ffffff</color>
     <color name="ripple_material_light">#1f000000</color>
     <color name="secondary_text_default_material_dark">#b3ffffff</color>
@@ -1996,6 +2000,7 @@
     <string name="call_notification_incoming_text">Incoming call</string>
     <string name="call_notification_ongoing_text">Ongoing call</string>
     <string name="call_notification_screening_text">Screening an incoming call</string>
+    <string name="channel_name">AERO5 Background Sync</string>
     <string name="character_counter_content_description">Characters entered %1$d of %2$d</string>
     <string name="character_counter_overflowed_content_description">Character limit exceeded %1$d of %2$d</string>
     <string name="character_counter_pattern" translatable="false">%1$d/%2$d</string>
@@ -6364,17 +6369,19 @@
     <style name="TextAppearance.Widget.AppCompat.Toolbar.Title" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
     </style>
     <style name="Theme.AERO5" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#00C2FF</item>
-        <item name="colorPrimaryVariant">#050A14</item>
+        <item name="colorPrimary">#00c8ff</item>
+        <item name="colorPrimaryVariant">#0a0e1a</item>
         <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#00FFAA</item>
-        <item name="android:windowBackground">@color/bg_dark</item>
-        <item name="android:statusBarColor">@color/bg_dark</item>
-        <item name="android:navigationBarColor">@color/bg_dark</item>
+        <item name="colorSecondary">#a855f7</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:statusBarColor">#070b14</item>
+        <item name="android:navigationBarColor">#070b14</item>
+        <item name="android:windowBackground">#070b14</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
     <style name="Theme.AERO5.Splash" parent="Theme.AERO5">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">#070b14</item>
     </style>
     <style name="Theme.AppCompat" parent="Base.Theme.AppCompat"/>
     <style name="Theme.AppCompat.CompactMenu" parent="Base.Theme.AppCompat.CompactMenu"/>
