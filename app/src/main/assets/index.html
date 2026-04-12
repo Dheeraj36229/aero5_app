@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
-   AERO5 v6 — Design System
+   AERO5 v5 — Design System
 ═══════════════════════════════════════════════ */
 :root{
   /* Brand */
@@ -162,53 +162,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .toast-body{font-size:11px;color:var(--text2);line-height:1.5}
 .toast-close{position:absolute;top:10px;right:12px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text3);font-size:16px}
 
-/* SAFETY STATUS CHIP */
-#safetyStatus {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 14px 18px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: all var(--ease);
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-#safetyStatus::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent);
-  opacity: 0.5;
-}
-#safetyIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all var(--ease);
-}
-#safetyTitle {
-  font-size: 13px;
-  font-weight: 800;
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 1.5px;
-  color: var(--teal);
-  transition: all var(--ease);
-}
-#safetySub {
-  font-size: 10px;
-  color: var(--text2);
-  margin-top: 2px;
-  letter-spacing: 0.2px;
-}
-
 /* ════════════════════════════════
    HOME TAB
 ════════════════════════════════ */
@@ -322,33 +275,28 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .pct-reason{font-size:11px;color:var(--text2);margin-top:8px;min-height:16px}
 
 /* MODE CARDS */
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 12px;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);text-align:center;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow)}
-.mode-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent);opacity:0;transition:opacity .3s}
-.mode-card.active{border-color:var(--cyan);background:var(--cyan-dim);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,194,255,0.15)}
-.mode-card.active::after{opacity:1}
-.mode-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
-.mode-card svg{width:28px;height:28px;stroke:var(--text3);transition:all .3s ease}
-.mode-card.active svg{stroke:var(--cyan);filter:drop-shadow(0 0 8px var(--cyan-glow));transform:scale(1.1)}
-.mode-name{font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--text3);font-family:'Orbitron',sans-serif;transition:color var(--ease)}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 10px;cursor:pointer;transition:all var(--ease);text-align:center;position:relative;overflow:hidden}
+.mode-card.active{border-color:var(--cyan);background:var(--cyan-dim)}
+.mode-card.active::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.mode-card svg{width:26px;height:26px;stroke:var(--mode-icon);margin:0 auto 6px;display:block;transition:stroke var(--ease)}
+.mode-card.active svg{stroke:var(--cyan)}
+.mode-name{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text3);font-family:'Space Mono',monospace;transition:color var(--ease)}
 .mode-card.active .mode-name{color:var(--cyan)}
-.mode-desc{font-size:9px;color:var(--text3);margin-top:-2px;font-family:'Space Mono',monospace;opacity:0.7}
-.mode-card:active{transform:scale(.95)}
+.mode-desc{font-size:9px;color:var(--text3);margin-top:3px}
 
 /* SLIDER */
-.slider-section{padding:8px 8px 16px;background:var(--surface2);border-radius:20px;margin-bottom:16px;border:1px solid var(--border)}
-.filter-slider{width:100%;height:6px;appearance:none;border-radius:3px;outline:none;cursor:pointer;
+.slider-section{padding:4px 0 12px}
+.filter-slider{width:100%;height:4px;appearance:none;border-radius:2px;outline:none;cursor:pointer;
   background:linear-gradient(to right,var(--cyan) var(--fp,72%),var(--surface3) var(--fp,72%));transition:background .1s}
-.filter-slider::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--text);border:3px solid var(--cyan);box-shadow:0 0 15px var(--cyan-glow);cursor:pointer;transition:all .2s ease}
-.filter-slider::-webkit-slider-thumb:active{transform:scale(1.2);box-shadow:0 0 25px var(--cyan-glow)}
-.slider-marks{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);margin-top:10px;font-family:'Space Mono',monospace;letter-spacing:1px}
+.filter-slider::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:var(--bg);border:2.5px solid var(--cyan);box-shadow:0 0 12px var(--cyan-glow);cursor:pointer;transition:box-shadow var(--ease)}
+.slider-marks{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);margin-top:6px;font-family:'Space Mono',monospace;letter-spacing:.5px}
 
 /* SYNC BTN */
-.sync-btn{width:100%;padding:18px;border:none;border-radius:18px;cursor:pointer;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,var(--cyan),var(--teal));color:#050A14;transition:all .3s cubic-bezier(.4,0,.2,1);margin-top:8px;position:relative;overflow:hidden;box-shadow:0 4px 15px rgba(0,194,255,0.3)}
-.sync-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);transition:left 0.5s}
-.sync-btn:hover::before{left:100%}
-.sync-btn:active{transform:scale(.96);box-shadow:0 2px 8px rgba(0,194,255,0.2)}
-.sync-btn:disabled{opacity:.6;cursor:not-allowed;filter:grayscale(0.5)}
+.sync-btn{width:100%;padding:15px;border:none;border-radius:14px;cursor:pointer;font-family:'Orbitron',monospace;font-size:11px;font-weight:800;letter-spacing:3px;background:linear-gradient(130deg,var(--cyan),var(--teal));color:#050A14;transition:all var(--ease);margin-top:8px;position:relative;overflow:hidden}
+.sync-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.2),transparent)}
+.sync-btn:active{transform:scale(.97)}
+.sync-btn:disabled{opacity:.5}
 .sync-status{display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);margin-top:10px}
 .sync-status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulseDot 2s infinite;flex-shrink:0}
 .sync-status-text{font-size:10px;color:var(--text2);font-family:'Space Mono',monospace;flex:1;letter-spacing:.3px}
@@ -474,6 +422,61 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .key-row .modal-input{flex:1;padding-right:44px}
 .key-toggle{position:absolute;right:14px;cursor:pointer;color:var(--text3);display:flex;align-items:center}
 .key-toggle svg{width:16px;height:16px}
+
+/* ─── ESP32 TAB ─── */
+.esp-hero{background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+.esp-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow2),transparent)}
+.esp-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.esp-icon{width:52px;height:52px;border-radius:14px;background:rgba(0,255,179,.08);border:1px solid rgba(0,255,179,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.esp-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;letter-spacing:1px;margin-bottom:3px}
+.esp-sub{font-size:11px;color:var(--muted2);line-height:1.55}
+.esp-status{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(0,255,179,.04);border:1px solid rgba(0,255,179,.1)}
+.esp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background .4s}
+.esp-stxt{font-size:10px;font-family:'Space Mono',monospace;flex:1;letter-spacing:.3px;color:var(--muted2)}
+.steps{margin-bottom:12px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;margin-bottom:8px;display:flex;gap:13px;align-items:flex-start;transition:all .2s}
+.step.active{border-color:var(--glow);background:rgba(0,212,255,.04)}
+.step.done{border-color:rgba(0,255,179,.35);background:rgba(0,255,179,.03)}
+.step-num{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',monospace;font-size:11px;font-weight:800;color:var(--muted);transition:all .2s}
+.step.active .step-num{border-color:var(--glow);color:var(--glow);background:rgba(0,212,255,.1)}
+.step.done .step-num{border-color:var(--glow2);background:rgba(0,255,179,.1)}
+.step-chk{display:none;width:14px;height:14px;stroke:var(--glow2);stroke-width:2.5;fill:none;stroke-linecap:round}
+.step.done .step-chk{display:block}.step.done .step-nnum{display:none}
+.step-body{flex:1;min-width:0}
+.step-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.step-desc{font-size:11px;color:var(--muted2);line-height:1.6}
+.step-tag{display:inline-block;font-size:9px;letter-spacing:1px;font-family:'Space Mono',monospace;padding:3px 8px;border-radius:6px;margin-top:6px;font-weight:700}
+.tag-info{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--glow)}
+.tag-ok{background:rgba(0,255,179,.1);border:1px solid rgba(0,255,179,.25);color:var(--glow2)}
+.tag-wait{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted)}
+.cred-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.cred-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 11px}
+.cred-key{font-size:8px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:4px}
+.cred-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--glow)}
+.portal-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.portal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow2),transparent)}
+.portal-btn{width:100%;padding:14px;border:none;border-radius:12px;cursor:pointer;font-family:'Orbitron',monospace;font-size:10px;font-weight:900;letter-spacing:2.5px;background:linear-gradient(135deg,rgba(0,255,179,.85),rgba(0,212,255,.7));color:#05080f;transition:all .2s;position:relative;overflow:hidden}
+.portal-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent)}
+.portal-btn:active{transform:scale(.97)}
+.portal-frame-wrap{width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--border2);margin-top:10px;background:var(--card);display:none}
+.portal-frame-wrap.open{display:block}
+.portal-frame-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
+.portal-frame-url{font-size:10px;font-family:'Space Mono',monospace;color:var(--muted2)}
+.portal-frame-x{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:0 2px;line-height:1;transition:color .2s}
+.portal-frame-x:active{color:var(--text)}
+iframe.portal-frame{width:100%;height:420px;border:none;display:block}
+.fb-fields{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px}
+.fb-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.fb-row:last-child{border-bottom:none}
+.fb-k{font-size:10px;color:var(--muted2)}
+.fb-v{font-size:10px;font-family:'Space Mono',monospace;color:var(--glow2);letter-spacing:.3px}
+/* Improve filter label */
+.filter-sublabel{font-size:9px;letter-spacing:4px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:4px}
+/* Score card in health tab */
+.score-card{background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:18px;text-align:center;margin-bottom:12px;position:relative;overflow:hidden}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow2),transparent)}
+.score-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin:12px 0 8px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--glow2),var(--glow));transition:width 1.5s cubic-bezier(.4,0,.2,1)}
 </style>
 </head>
 <body>
@@ -566,6 +569,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
       <input class="field-input" id="maskKey" type="password" placeholder="Enter your key">
     </div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">CONNECT MASK</button>
+    <div style="text-align:center;margin-top:20px">
+      <a href="#" onclick="openInstructions()" style="color:var(--text3);font-size:10px;text-decoration:none;letter-spacing:1px;font-family:'Space Mono',monospace;border-bottom:1px solid var(--border);padding-bottom:2px">FIRST TIME USER? SETUP GUIDE</a>
+    </div>
     <div class="login-err" id="loginErr"></div>
   </div>
 </div>
@@ -594,17 +600,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 
     <!-- ══ HOME ══ -->
     <div class="tab active" id="tab-home">
-
-      <!-- SAFETY STATUS CHIP -->
-      <div id="safetyStatus">
-        <div id="safetyIcon" style="background:var(--teal-dim)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div style="flex:1">
-          <div id="safetyTitle">AIR IS SAFE</div>
-          <div id="safetySub">Ideal conditions. Breathe freely.</div>
-        </div>
-      </div>
 
       <!-- AQI HERO -->
       <div class="hero">
@@ -789,47 +784,65 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
         <div class="pct-reason" id="filterReason">Auto mode — adjusting to live AQI</div>
       </div>
 
-      <div class="section-title">PROTECTION MODE</div>
+      <div class="section-title">OPERATING MODE</div>
       <div class="mode-grid">
-        <div class="mode-card active" id="mMode-0" onclick="setMasterMode('auto', 0)">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 010 7.78L12 21.23l-8.84-8.84a5.5 5.5 0 017.78-7.78L12 5.62l1.06-1.01a5.5 5.5 0 017.78 0z"/></svg>
-          <div class="mode-name">RESTING</div><div class="mode-desc">AI PROTECTION</div>
+        <div class="mode-card active" onclick="setMode(this,'auto')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <div class="mode-name">AUTO</div><div class="mode-desc">AQI-driven</div>
         </div>
-        <div class="mode-card" id="mMode-1" onclick="setMasterMode('auto', 1)">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><path d="M12 22V12m0 0l-3 3m3-3l3 3M9 12H3m6 0l-3-3M15 12h6m-6 0l3-3"/></svg>
-          <div class="mode-name">WALKING</div><div class="mode-desc">AI PROTECTION</div>
-        </div>
-        <div class="mode-card" id="mMode-2" onclick="setMasterMode('auto', 2)">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <div class="mode-name">RUNNING</div><div class="mode-desc">AI PROTECTION</div>
-        </div>
-        <div class="mode-card" id="mMode-manual" onclick="setMasterMode('manual')">
+        <div class="mode-card" onclick="setMode(this,'manual')">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-          <div class="mode-name">MANUAL</div><div class="mode-desc">CUSTOM %</div>
+          <div class="mode-name">MANUAL</div><div class="mode-desc">Custom level</div>
+        </div>
+        <div class="mode-card" onclick="setMode(this,'sport')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <div class="mode-name">SPORT</div><div class="mode-desc">High airflow</div>
+        </div>
+        <div class="mode-card" onclick="setMode(this,'sleep')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M21 12.79A9 9 0 1115.21 7a7 7 0 005.79 5.79z"/></svg>
+          <div class="mode-name">SLEEP</div><div class="mode-desc">Silent mode</div>
         </div>
       </div>
 
       <div class="slider-section" id="sliderSection" style="display:none">
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-           <span style="font-size:10px; color:var(--cyan); font-family:'Orbitron',sans-serif; letter-spacing:1px;">ADJUST FILTRATION</span>
-           <span id="sliderValDisplay" style="font-size:11px; color:var(--text); font-family:'Space Mono',monospace; font-weight:800;">72%</span>
-        </div>
         <input type="range" class="filter-slider" id="filterSlider" min="0" max="100" value="72" style="--fp:72%" oninput="onSlider(this)">
         <div class="slider-marks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
       </div>
 
-      <!-- ══ SMART ENGINE ══ -->
-      <div class="section-title" style="margin-top:4px">AI ANALYTICS ENGINE</div>
+      <!-- ══ ML SENSOR PANEL ══ -->
+      <div class="section-title" style="margin-top:4px">ML ENGINE — SMART FILTRATION</div>
       <div class="ml-panel">
         <div class="ml-row">
-          <div class="ml-label">💨 BREATHING INTENSITY <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(SAMPLED)</span></div>
-          <div class="ml-val"><span id="breathVal">16</span> <span style="font-size:9px;color:var(--text3)">bpm</span></div>
+          <div class="ml-label">🫁 BREATHING RATE <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(AUTO · FROM PM2.5)</span></div>
+          <div class="ml-val"><span id="breathVal">16</span> <span style="font-size:9px;color:var(--text3)">br/min</span></div>
         </div>
+        <!-- Read-only slider — reflects PM2.5-derived breathing rate -->
         <input type="range" class="breath-slider" id="breathSlider" min="8" max="40" value="16" style="--bp:33.3%;pointer-events:none;opacity:0.6" readonly>
+        <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px"><span>12 REST</span><span>↑ with PM2.5</span><span>40 MAX</span></div>
+        <div style="font-size:9px;color:var(--text3);margin-top:4px;font-family:'Space Mono',monospace;letter-spacing:.5px">Auto-computed: higher PM2.5 → faster breathing → lower effective filtration</div>
+
+        <div class="ml-row" style="margin-top:12px;margin-bottom:6px">
+          <div class="ml-label">⚡ ACTIVITY LEVEL <span style="font-size:8px;color:var(--purple);letter-spacing:1px">(OVERRIDE)</span></div>
+          <div id="actLabel" style="font-size:9px;color:var(--purple);font-family:'Space Mono',monospace;letter-spacing:1px">RESTING</div>
+        </div>
+        <div class="act-grid">
+          <div class="act-btn active" id="act0" onclick="setActivity(0)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 010 7.78L12 21.23l-8.84-8.84a5.5 5.5 0 017.78-7.78L12 5.62l1.06-1.01a5.5 5.5 0 017.78 0z"/></svg>
+            <div class="act-btn-label">RESTING</div>
+          </div>
+          <div class="act-btn" id="act1" onclick="setActivity(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><path d="M12 22V12m0 0l-3 3m3-3l3 3M9 12H3m6 0l-3-3M15 12h6m-6 0l3-3"/></svg>
+            <div class="act-btn-label">WALKING</div>
+          </div>
+          <div class="act-btn" id="act2" onclick="setActivity(2)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <div class="act-btn-label">RUNNING</div>
+          </div>
+        </div>
 
         <div class="ml-result" id="mlResult">
           <div class="ml-result-dot" id="mlDot" style="background:var(--text3)"></div>
-          <div class="ml-result-text" id="mlResultText">AI is standby...</div>
+          <div class="ml-result-text" id="mlResultText">Waiting for AQI data to run ML prediction...</div>
         </div>
       </div>
 
@@ -839,7 +852,17 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
       </div>
       <button class="sync-btn" id="syncBtn" onclick="doSync()">⚡ SYNC TO AERO5</button>
 
-      <div class="section-title">CARTRIDGE HEALTH</div>
+      <div class="card" style="margin-top:12px">
+        <div class="section-title" style="margin-bottom:10px">DATA CHANNEL</div>
+        <div class="ch-row">
+          <div class="ch-pill active" onclick="setCh(this,'BLE 5.0')">BLE 5.0</div>
+          <div class="ch-pill" onclick="setCh(this,'Wi-Fi MQTT')">Wi-Fi MQTT</div>
+          <div class="ch-pill" onclick="setCh(this,'USB Serial')">USB Serial</div>
+          <div class="ch-pill" onclick="setCh(this,'LoRa 868')">LoRa 868</div>
+        </div>
+      </div>
+
+      <div class="section-title">FILTER STATUS</div>
       <div class="fstat-row">
         <div class="fstat"><div class="fstat-val" style="color:var(--teal)">87%</div><div class="fstat-key">LIFE LEFT</div></div>
         <div class="fstat"><div class="fstat-val" style="color:var(--cyan)">HEPA</div><div class="fstat-key">GRADE</div></div>
@@ -848,6 +871,104 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
       </div>
 
     </div><!-- /mask -->
+
+
+    <!-- ══ ESP32 SETUP ══ -->
+    <div class="tab" id="tab-esp">
+
+      <div class="esp-hero">
+        <div class="esp-top">
+          <div class="esp-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--glow2)" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+          </div>
+          <div>
+            <div class="esp-title">ESP32 Setup</div>
+            <div class="esp-sub">Connect your AERO5 hardware to WiFi using the built-in provisioning portal. Takes about 2 minutes.</div>
+          </div>
+        </div>
+        <div class="esp-status">
+          <div class="esp-dot" id="espDot" style="background:var(--muted)"></div>
+          <div class="esp-stxt" id="espStxt">Not connected — follow the steps below</div>
+        </div>
+      </div>
+
+      <div class="section-title">SETUP INSTRUCTIONS</div>
+      <div class="steps">
+        <div class="step active" id="step1">
+          <div class="step-num"><span class="step-nnum">1</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-body">
+            <div class="step-title">Power on your AERO5 mask</div>
+            <div class="step-desc">Connect the ESP32 to power via USB or battery. The onboard LED will blink rapidly — this means it is ready and broadcasting its setup WiFi hotspot.</div>
+            <span class="step-tag tag-info">LED blinks fast when ready</span>
+          </div>
+        </div>
+
+        <div class="step" id="step2">
+          <div class="step-num"><span class="step-nnum">2</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-body">
+            <div class="step-title">Connect your phone to AERO5 hotspot</div>
+            <div class="step-desc">Open your phone's WiFi settings and connect to the AERO5 hotspot using the credentials below. Return to this app after connecting.</div>
+            <div class="cred-row">
+              <div class="cred-box"><div class="cred-key">WIFI NAME</div><div class="cred-val">AERO5_SETUP</div></div>
+              <div class="cred-box"><div class="cred-key">PASSWORD</div><div class="cred-val">aero51234</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" id="step3">
+          <div class="step-num"><span class="step-nnum">3</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-body">
+            <div class="step-title">Open the device portal</div>
+            <div class="step-desc">Tap the button below to open the ESP32 web portal directly inside this app. Enter your home WiFi name and password so the mask can reach the internet and sync with Firebase.</div>
+          </div>
+        </div>
+
+        <div class="step" id="step4">
+          <div class="step-num"><span class="step-nnum">4</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-body">
+            <div class="step-title">Mask connects and starts syncing</div>
+            <div class="step-desc">After you save WiFi credentials, the ESP32 restarts, connects to your network, reads AQI and filter data from Firebase, and automatically controls the fan speed.</div>
+            <span class="step-tag tag-wait" id="step4Tag">Waiting for WiFi credentials...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">DEVICE PORTAL</div>
+      <div class="portal-card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,255,179,.08);border:1px solid rgba(0,255,179,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--glow2)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:1px">ESP32 Web Portal</div>
+            <div style="font-size:10px;color:var(--muted2)">192.168.4.1 · Must be on AERO5_SETUP WiFi</div>
+          </div>
+        </div>
+        <button class="portal-btn" id="portalBtn" onclick="togglePortal()">OPEN DEVICE PORTAL</button>
+        <div class="portal-frame-wrap" id="portalWrap">
+          <div class="portal-frame-hdr">
+            <span class="portal-frame-url">http://192.168.4.1 — AERO5 Setup Portal</span>
+            <button class="portal-frame-x" onclick="closePortal()">×</button>
+          </div>
+          <iframe class="portal-frame" id="portalFrame" src="about:blank"></iframe>
+        </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;line-height:1.65;letter-spacing:.3px">
+          If the portal does not load, ensure your phone is connected to AERO5_SETUP WiFi, then tap the button again.
+        </div>
+      </div>
+
+      <div class="section-title">DATA SENT TO ESP32 (Firebase)</div>
+      <div class="fb-fields">
+        <div class="fb-row"><span class="fb-k">aqi</span><span class="fb-v" id="fbAqi">--</span></div>
+        <div class="fb-row"><span class="fb-k">filter %</span><span class="fb-v" id="fbFilter">--</span></div>
+        <div class="fb-row"><span class="fb-k">breathing_rate</span><span class="fb-v" id="fbBreath">--</span></div>
+        <div class="fb-row"><span class="fb-k">effective_filtration</span><span class="fb-v" id="fbEff">--</span></div>
+        <div class="fb-row"><span class="fb-k">ml_warning</span><span class="fb-v" id="fbWarn">--</span></div>
+        <div class="fb-row"><span class="fb-k">source</span><span class="fb-v" id="fbSrc">--</span></div>
+        <div class="fb-row" style="border-bottom:none"><span class="fb-k">timestamp</span><span class="fb-v" id="fbTs" style="font-size:9px">--</span></div>
+      </div>
+
+    </div><!-- /esp -->
 
     <!-- ══ HEALTH ══ -->
     <div class="tab" id="tab-health">
@@ -924,7 +1045,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
           <circle cx="24" cy="23" r="1.8" fill="url(#lg3)"/>
         </svg>
         <div class="about-wordmark">AERO5</div>
-        <div class="about-ver">FIRMWARE v2.4.1 · APP v6.0.0</div>
+        <div class="about-ver">FIRMWARE v2.4.1 · APP v5.0.0</div>
         <div class="about-divider"></div>
         <div class="about-stats">
           <div><div class="about-stat-val" id="aboutSyncs">0</div><div class="about-stat-key">TOTAL SYNCS</div></div>
@@ -945,14 +1066,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
         <div class="srow">
           <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M1 6s5-2 11-2 11 2 11 2"/><path d="M5 12s3-1 7-1 7 1 7 1"/><path d="M9 18s1-.5 3-.5 3 .5 3 .5"/><line x1="12" y1="20" x2="12" y2="22"/></svg></div><div><div class="srow-title">WAQI Live Feed</div><div class="srow-sub">Real-time AQI · 5 min refresh</div></div></div>
           <div class="srow-val on" id="waqiChip">LIVE</div>
-        </div>
-        <div class="srow" style="flex-direction:column; align-items:flex-start; gap:12px; padding:16px 15px;">
-          <div class="srow-title" style="font-size:11px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;">Data Protocol</div>
-          <div class="ch-row">
-            <div class="ch-pill active" onclick="setCh(this,'BLE 5.0')">BLE 5.0</div>
-            <div class="ch-pill" onclick="setCh(this,'Wi-Fi MQTT')">Wi-Fi</div>
-            <div class="ch-pill" onclick="setCh(this,'USB Serial')">USB</div>
-          </div>
         </div>
       </div>
 
@@ -1031,6 +1144,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L4 6v5c0 5.25 3.5 10.15 8 11.4C16.5 21.15 20 16.25 20 11V6l-8-4z"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
       <div class="nav-tab-label">MASK</div>
     </div>
+    <div class="nav-tab" id="nav-esp" onclick="switchTab('esp')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+      <div class="nav-tab-label">ESP32</div>
+      <div class="nav-badge" id="espBadge"></div>
+    </div>
     <div class="nav-tab" id="nav-health" onclick="switchTab('health')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><polyline points="3 12 6 12 8 6 11 18 13 10 16 14 18 12 21 12"/></svg>
       <div class="nav-tab-label">HEALTH</div>
@@ -1107,6 +1225,68 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 </div><!-- /appScreen -->
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script>
+/* ═══ ESP32 PORTAL ═══ */
+let portalOpen=false;
+function togglePortal(){
+  portalOpen=!portalOpen;
+  const wrap=document.getElementById('portalWrap');
+  const btn=document.getElementById('portalBtn');
+  const iframe=document.getElementById('portalFrame');
+  if(portalOpen){
+    wrap.classList.add('open');
+    btn.textContent='CLOSE PORTAL';
+    iframe.src='http://192.168.4.1';
+    document.getElementById('step3').classList.add('active');
+    document.getElementById('espDot').style.background='var(--amber)';
+    document.getElementById('espStxt').textContent='Portal loading... make sure you are on AERO5_SETUP WiFi';
+
+    // Fallback timer: if iframe doesn't load after 5s, suggest system browser
+    setTimeout(() => {
+        if(portalOpen && iframe.src === 'http://192.168.4.1') {
+            document.getElementById('espStxt').textContent = 'Portal slow? Ensure WiFi is connected to AERO5_SETUP.';
+        }
+    }, 5000);
+  }else{closePortal();}
+}
+function closePortal(){
+  portalOpen=false;
+  document.getElementById('portalWrap').classList.remove('open');
+  document.getElementById('portalBtn').textContent='OPEN DEVICE PORTAL';
+  document.getElementById('portalFrame').src='about:blank';
+}
+
+function openInstructions(){
+  MASK_ID = 'NEW_USER';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='flex';
+  document.getElementById('topMaskId').textContent = 'SETUP';
+  switchTab('esp');
+  // Just initialize some basic UI without full background services
+  renderFilter(72);
+}
+
+/* ═══ UPDATE ESP DISPLAY ═══ */
+function updateEspDisplay(aqi,filter,breath,eff,warning,ts){
+  const g=id=>document.getElementById(id);
+  if(g('fbAqi')) g('fbAqi').textContent=aqi;
+  if(g('fbFilter')) g('fbFilter').textContent=filter+'%';
+  if(g('fbBreath')) g('fbBreath').textContent=breath+' br/min';
+  if(g('fbEff')) g('fbEff').textContent=eff+'%';
+  if(g('fbWarn')){g('fbWarn').textContent=warning;g('fbWarn').style.color=warning==='Normal'?'var(--glow2)':'var(--red)';}
+  if(g('fbSrc')) g('fbSrc').textContent='ml_auto';
+  if(g('fbTs')) g('fbTs').textContent=ts?ts.replace('T',' ').split('.')[0]:'--';
+}
+
+/* ═══ SCORE CARD ═══ */
+function updateScore(filter){
+  const score=Math.min(99,Math.round(filter*.85+15));
+  const sn=document.getElementById('scoreNum');if(sn)sn.textContent=score;
+  const sf=document.getElementById('scoreFill');if(sf)sf.style.width=score+'%';
+  const ss=document.getElementById('scoreSub');if(ss)ss.textContent='AERO5 filtered ~'+score+'% of harmful particles today';
+}
+
+</script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script>
 'use strict';
@@ -1162,7 +1342,7 @@ const HEALTH_DATA = {
 
 /* ═══════════════ STATE ═══════════════ */
 let MASK_ID = '', curAQI = 0, curFilter = 72, curMode = 'auto', curChannel = 'BLE 5.0';
-let lastSentTime = 0, lastSentAQI = -1, lastSentFilter = -1, syncCount = 0, sessionStart = Date.now();
+let lastSentTime = 0, lastSentAQI = -1, syncCount = 0, sessionStart = Date.now();
 let forecastBuilt = false, aqiHistory = [], alertsEnabled = true, alertLastAQI = -999;
 let rawPollutants = null; // real values from WAQI
 
@@ -1190,24 +1370,6 @@ const db = firebase.database();
 function ab(action, data){
   try{ if(window.AndroidBridge) window.AndroidBridge.onEvent(action, JSON.stringify(data||{})); }
   catch(e){}
-}
-
-function syncFromFirebase() {
-  if(!MASK_ID) return;
-  db.ref('masks/'+MASK_ID).once('value').then(snap => {
-    if(snap.exists()) {
-      const d = snap.val();
-      if(d.aqi) {
-        curAQI = d.aqi;
-        const lv = getLevel(curAQI);
-        renderAQI(curAQI, lv);
-      }
-      if(d.filter) {
-        curFilter = d.filter;
-        renderFilter(curFilter);
-      }
-    }
-  });
 }
 
 /* ═══════════════ SPLASH ═══════════════ */
@@ -1321,35 +1483,6 @@ function checkAlert(aqi){
 
 /* ═══════════════ RENDER AQI ═══════════════ */
 function renderAQI(aqi, lv){
-  // Update Safety Status
-  const sStatus = document.getElementById('safetyStatus');
-  const sTitle = document.getElementById('safetyTitle');
-  const sSub = document.getElementById('safetySub');
-  const sIcon = document.getElementById('safetyIcon');
-
-  if (aqi <= 50) {
-    sStatus.style.borderColor = 'rgba(0,255,170,0.2)';
-    sTitle.textContent = 'AIR IS SAFE';
-    sTitle.style.color = 'var(--teal)';
-    sSub.textContent = 'Ideal conditions. Breathe freely.';
-    sIcon.style.background = 'var(--teal-dim)';
-    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';
-  } else if (aqi <= 100) {
-    sStatus.style.borderColor = 'rgba(163,230,53,0.2)';
-    sTitle.textContent = 'MODERATE AIR';
-    sTitle.style.color = '#A3E635';
-    sSub.textContent = 'Sensitive users should consider wearing mask.';
-    sIcon.style.background = 'rgba(163,230,53,0.1)';
-    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
-  } else {
-    sStatus.style.borderColor = 'rgba(244,63,94,0.2)';
-    sTitle.textContent = 'WEAR YOUR MASK';
-    sTitle.style.color = 'var(--red)';
-    sSub.textContent = 'Unhealthy air detected. AERO5 is protecting you.';
-    sIcon.style.background = 'rgba(244,63,94,0.1)';
-    sIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
-  }
-
   // Gauge arc: circumference = 2π×50 = 314.16
   const offset = 314.2 * (1 - Math.min(aqi/300, 1));
   document.getElementById('gaugeFill').style.strokeDashoffset = offset;
@@ -1386,8 +1519,9 @@ function renderAQI(aqi, lv){
 
   // Filter auto mode
   if(curMode==='auto'){
-    // Removed AQI-based static overwrite to prioritize ML-based effective filtration
-    document.getElementById('filterReason').textContent = `Auto mode — optimizing filtration via ML...`;
+    curFilter = lv.filter;
+    renderFilter(curFilter);
+    document.getElementById('filterReason').textContent = `Auto mode — AQI ${aqi} → ${lv.filter}% filtration`;
   }
 
   // Update time
@@ -1457,7 +1591,7 @@ function startFluctuation(){
     updateProtectionScore();
 
     // Background Firebase auto-sync
-    autoSync(curAQI, curFilter);
+    autoSync(curAQI, lv.filter);
 
     // Re-run ML if AQI shifted more than 5 from last ML call
     // Also re-derive breathing from fluctuating PM2.5
@@ -1468,7 +1602,7 @@ function startFluctuation(){
     if(bEl) bEl.textContent = curBreathing;
     if(Math.abs(curAQI - lastMlAqi) >= 5) scheduleMlCall();
 
-    ab('AQI_UPDATE', {aqi: curAQI, filter: curFilter});
+    ab('AQI_UPDATE', {aqi: curAQI, filter: lv.filter});
   }, FLUCTUATE_MS);
 }
 
@@ -1552,40 +1686,26 @@ function onSlider(el){
   curFilter = parseInt(el.value);
   el.style.setProperty('--fp', curFilter+'%');
   document.getElementById('filterPct').textContent = curFilter+'%';
-  document.getElementById('sliderValDisplay').textContent = curFilter+'%';
   document.getElementById('filterReason').textContent = `Manual override: ${curFilter}% filtration intensity`;
-  updateProtectionScore();
-  ab('AQI_UPDATE', {aqi: curAQI, filter: curFilter});
-}
-
-function setMasterMode(mode, activity = 0){
-  curMode = mode;
-  if(mode === 'auto'){
-    curActivity = activity;
-    document.getElementById('sliderSection').style.display = 'none';
-    scheduleMlCall();
-    document.getElementById('filterReason').textContent = `AI mode — optimizing filtration...`;
-  } else {
-    document.getElementById('sliderSection').style.display = 'block';
-    document.getElementById('filterReason').textContent = `Manual mode — adjust slider below`;
-  }
-
-  // UI Update
-  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
-  const targetId = (mode === 'manual') ? 'mMode-manual' : 'mMode-' + activity;
-  const target = document.getElementById(targetId);
-  if(target) target.classList.add('active');
-
   updateProtectionScore();
 }
 
 function setMode(btn, m){
-  if(m === 'manual') setMasterMode('manual');
-  else setMasterMode('auto', 0);
-}
-
-function setActivity(level){
-  setMasterMode('auto', level);
+  document.querySelectorAll('.mode-card').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  curMode = m;
+  document.getElementById('sliderSection').style.display = m==='manual'?'block':'none';
+  if(m==='auto' && curAQI){
+    curFilter = getLevel(curAQI).filter; renderFilter(curFilter);
+    document.getElementById('filterReason').textContent = `Auto mode — AQI ${curAQI} → ${curFilter}% filtration`;
+  } else if(m==='sport'){
+    curFilter=85; renderFilter(85);
+    document.getElementById('filterReason').textContent = 'Sport mode — increased airflow, 85% filtration';
+  } else if(m==='sleep'){
+    curFilter=55; renderFilter(55);
+    document.getElementById('filterReason').textContent = 'Sleep mode — whisper-quiet, 55% filtration';
+  }
+  updateProtectionScore();
 }
 
 function setCh(el, ch){
@@ -1712,6 +1832,7 @@ async function pushToFirebase(aqi, filter, breathing, activity, effectiveFiltrat
     updateSyncCounters();
     document.getElementById('syncStatusText').textContent =
       `Firebase updated — AQI:${aqi} · Filter:${Math.round(effectiveFiltration)}% · Breathing:${breathing} br/min · ${warning}`;
+    updateEspDisplay(aqi, filter, breathing, Math.round(effectiveFiltration), warning, new Date().toISOString());
   } catch(e){
     document.getElementById('syncStatusText').textContent = 'Firebase sync failed — check connection';
     console.warn('Firebase error:', e);
@@ -1725,95 +1846,79 @@ async function autoSyncML(aqi, filter, breathing, activity, eff, penalty, warnin
 
 async function doSync(){
   const btn = document.getElementById('syncBtn');
-  const isManual = (curMode === 'manual');
+  btn.textContent = 'CALLING ML...'; btn.disabled = true;
 
-  btn.textContent = isManual ? 'PREPARING SYNC...' : 'CALLING ML...';
-  btn.disabled = true;
-
-  // Step 1: Call ML if in Auto mode
+  // Step 1: GET /predict?aqi=X&breathing=Y&activity=Z
   let mlData = {};
-  if(!isManual && curAQI > 0){
-    try{
-      const url = `${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
-      const res = await fetch(url);
-      if(res.ok){
-        const d = await res.json();
-        const eff = parseFloat(d.effective_filtration);
-        const penalty = parseFloat(d.breathing_penalty);
-        const rawProt = parseFloat(d.protection_raw);
-        if(!isNaN(eff)){
-          curFilter = Math.round(eff);
-          renderFilter(curFilter);
-          const actLabels = ['Resting','Walking','Running'];
-          document.getElementById('filterReason').textContent =
-            `ML: AQI ${curAQI} · ${curBreathing} bpm · ${actLabels[curActivity]} → ${curFilter}%`;
-          const mlDot = document.getElementById('mlDot');
-          if(mlDot) mlDot.style.background = (d.warning==='Normal') ? 'var(--teal)' : 'var(--red)';
-          const mlResultText = document.getElementById('mlResultText');
-          if(mlResultText) mlResultText.textContent =
-            `Effective: ${eff.toFixed(1)}% · Penalty: ${penalty.toFixed(1)}% · ${d.warning}`;
-          mlData = {
-            breathing_rate:       curBreathing,
-            activity_level:       curActivity,
-            effective_filtration: Math.round(eff * 10) / 10,
-            protection_raw:       isNaN(rawProt) ? 0 : Math.round(rawProt * 10) / 10,
-            breathing_penalty:    Math.round(penalty * 10) / 10,
-            ml_warning:           d.warning,
-            ml_advice:            d.advice
-          };
-        }
+  try{
+    const url = `${ML_URL}?aqi=${curAQI}&breathing=${curBreathing}&activity=${curActivity}`;
+    const res = await fetch(url);
+    if(res.ok){
+      const d = await res.json();
+      // Values come as strings like "72.50%" — parseFloat handles this correctly
+      const eff     = parseFloat(d.effective_filtration);
+      const penalty = parseFloat(d.breathing_penalty);
+      const rawProt = parseFloat(d.protection_raw);
+      if(!isNaN(eff)){
+        curFilter = Math.round(eff);
+        renderFilter(curFilter);
+        const actLabels = ['Resting','Walking','Running'];
+        document.getElementById('filterReason').textContent =
+          `ML: AQI ${curAQI} · ${curBreathing} br/min · ${actLabels[curActivity]} → ${curFilter}%`;
+        const mlDot = document.getElementById('mlDot');
+        if(mlDot) mlDot.style.background = (d.warning==='Normal') ? 'var(--teal)' : 'var(--red)';
+        const mlResultText = document.getElementById('mlResultText');
+        if(mlResultText) mlResultText.textContent =
+          `Effective: ${eff.toFixed(1)}% · Penalty: ${penalty.toFixed(1)}% · ${d.warning} — ${d.advice}`;
+        mlData = {
+          breathing_rate:       curBreathing,
+          activity_level:       curActivity,
+          effective_filtration: Math.round(eff * 10) / 10,
+          protection_raw:       isNaN(rawProt) ? 0 : Math.round(rawProt * 10) / 10,
+          breathing_penalty:    Math.round(penalty * 10) / 10,
+          ml_warning:           d.warning,
+          ml_advice:            d.advice
+        };
       }
-    } catch(e){ console.warn('ML call failed in doSync:', e); }
-  }
+    }
+  } catch(e){ console.warn('ML call failed in doSync:', e); }
 
   // Step 2: Push to Firebase
-  btn.textContent = 'TRANSMITTING...';
+  btn.textContent = 'SYNCING TO FIREBASE...';
   try{
-    // If manual, we use the curFilter value directly from the slider
-    const payload = {
+    await db.ref('masks/'+MASK_ID).update({
       aqi:       curAQI,
       filter:    curFilter,
       mode:      curMode,
       timestamp: new Date().toISOString(),
-      source:    isManual ? 'manual_override' : 'manual_sync',
+      source:    'manual_sync',
       ...mlData
-    };
-
-    await db.ref('masks/'+MASK_ID).update(payload);
-
+    });
     syncCount++;
     updateSyncCounters();
-    btn.textContent = 'SYNC SUCCESS ✓';
-    btn.style.background = 'var(--teal)';
-
+    btn.textContent = 'FIREBASE UPDATED ✓';
     document.getElementById('syncStatusText').textContent =
-      `Sent to Firebase: ${curMode.toUpperCase()} | ${curFilter}% | ${new Date().toLocaleTimeString()}`;
-
-    ab('SYNC', {aqi:curAQI, filter:curFilter, mode:curMode});
+      `Firebase updated — AQI:${curAQI} · Filter:${curFilter}% · Breathing:${curBreathing} br/min · ML:${mlData.ml_warning||'—'}`;
+    updateEspDisplay(curAQI, curFilter, curBreathing, curFilter, mlData.ml_warning||'Normal', new Date().toISOString());
+    ab('SYNC', {aqi:curAQI, filter:curFilter});
   } catch(e){
     btn.textContent = 'SYNC FAILED ✕';
-    btn.style.background = 'var(--red)';
-    document.getElementById('syncStatusText').textContent = 'Firebase connection error';
+    document.getElementById('syncStatusText').textContent = 'Firebase sync failed — check connection';
   }
-
-  setTimeout(()=>{
-    btn.disabled = false;
-    btn.textContent = '⚡ SYNC TO AERO5';
-    btn.style.background = ''; // Reset to CSS gradient
-  }, 2500);
+  btn.disabled = false;
+  setTimeout(()=>btn.textContent='⚡ SYNC TO AERO5', 2500);
 }
 
 async function autoSync(aqi, filter){
   if(!MASK_ID) return;
   const now = Date.now();
   if(now - lastSentTime < 15000) return;
-  // Sync if either AQI or Filter has changed
-  if(aqi === lastSentAQI && filter === lastSentFilter) return;
+  if(aqi === lastSentAQI) return;
   try{
     await db.ref('masks/'+MASK_ID).update({
       aqi, filter, timestamp: new Date().toISOString(), source: 'auto'
     });
-    lastSentTime = now; lastSentAQI = aqi; lastSentFilter = filter; syncCount++;
+    lastSentTime = now; lastSentAQI = aqi; syncCount++;
     updateSyncCounters();
   } catch(e){}
 }
@@ -1966,6 +2071,8 @@ async function fetchWAQI(lat, lon){
 
 /* ═══════════════ INIT ═══════════════ */
 function initApp(){
+  // Show ESP badge to draw attention to setup tab
+  setTimeout(()=>{const b=document.getElementById("espBadge");if(b)b.style.display="block";},3000);
   renderFilter(72);
   renderHistory();
 

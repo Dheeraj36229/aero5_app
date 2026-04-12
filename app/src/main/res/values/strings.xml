@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AERO5</string>
+    <string name="channel_name">AERO5 Background Sync</string>
 </resources>

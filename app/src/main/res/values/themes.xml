@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.AERO5" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#00C2FF</item>
-        <item name="colorPrimaryVariant">#050A14</item>
+        <item name="colorPrimary">#00c8ff</item>
+        <item name="colorPrimaryVariant">#0a0e1a</item>
         <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#00FFAA</item>
-        <item name="android:windowBackground">@color/bg_dark</item>
-        <item name="android:statusBarColor">@color/bg_dark</item>
-        <item name="android:navigationBarColor">@color/bg_dark</item>
+        <item name="colorSecondary">#a855f7</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:statusBarColor">#070b14</item>
+        <item name="android:navigationBarColor">#070b14</item>
+        <item name="android:windowBackground">#070b14</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
     <style name="Theme.AERO5.Splash" parent="Theme.AERO5">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">#070b14</item>
     </style>
 </resources>

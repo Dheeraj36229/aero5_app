@@ -1,19 +1,7 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.google.code.gson:gson:2.10.1'
-    }
-}
-
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
-
-import com.google.gson.Gson
 
 android {
     namespace 'com.aero5.mask'
@@ -23,18 +11,9 @@ android {
         applicationId "com.aero5.mask"
         minSdk 24
         targetSdk 34
-        versionCode 6
-        versionName "6.0"
+        versionCode 7
+        versionName "7.0.0"
         multiDexEnabled true
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file("debug.keystore")
-            storePassword "android"
-            keyAlias "androiddebugkey"
-            keyPassword "android"
-        }
     }
 
     buildTypes {
@@ -44,7 +23,6 @@ android {
         }
         debug {
             debuggable true
-            signingConfig signingConfigs.debug
         }
     }
 
@@ -55,29 +33,6 @@ android {
 
     buildFeatures {
         viewBinding true
-    }
-}
-
-task uploadApkAndNotify() {
-    doLast {
-        def version = android.defaultConfig.versionCode
-        def apkFile = file("build/outputs/apk/debug/app-debug.apk")
-        if (!apkFile.exists()) {
-            throw new GradleException("APK file not found! Please run 'gradle assembleDebug' first.")
-        }
-
-        println "Found APK for version $version at ${apkFile.absolutePath}"
-        println "--------------------------------------------------------"
-        println "MANUAL STEP REQUIRED (for security):"
-        println "1. Upload this APK to Firebase Storage (Bucket: aero5-886bf.firebasestorage.app)"
-        println "2. Get the Access Token / Download URL"
-        println "3. Update Firebase Remote Config:"
-        println "   - latest_version_code: $version"
-        println "   - apk_url: <YOUR_UPLOADED_URL>"
-        println "--------------------------------------------------------"
-        
-        // Automated notification via Realtime Database (Alternative to Remote Config for instant updates)
-        // Note: Full automation of Remote Config updates requires a Service Account Key which shouldn't be in source code.
     }
 }
 
@@ -94,15 +49,10 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-config'
-    implementation 'com.google.firebase:firebase-storage'
 
     // WorkManager for background tasks
     implementation 'androidx.work:work-runtime:2.9.0'
 
     // Location services
     implementation 'com.google.android.gms:play-services-location:21.1.0'
-
-    // Networking
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
