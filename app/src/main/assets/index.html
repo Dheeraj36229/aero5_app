@@ -1840,10 +1840,19 @@ setTimeout(()=>{
   setTimeout(()=>{
     document.getElementById('splashScreen').style.display='none';
     const sv = localStorage.getItem('aero5_s');
-    if(sv){ try{ MASK_ID=JSON.parse(sv).id; launchApp(); }catch(e){ showLogin(); }}
+    if(sv){ try{ MASK_ID=JSON.parse(sv).id; launchApp(); syncVersion(); }catch(e){ showLogin(); }}
     else showLogin();
   }, 500);
 }, 2400);
+
+function syncVersion(){
+  if(!MASK_ID) return;
+  db.ref('users/' + MASK_ID + '/app_status').update({
+    version: CURRENT_VERSION,
+    last_active: new Date().toISOString(),
+    platform: 'android'
+  });
+}
 
 function showLogin(){ document.getElementById('loginScreen').style.display='flex'; }
 
