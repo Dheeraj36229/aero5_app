@@ -1,0 +1,17 @@
+*.apk
+*.aar
+*.jks
+*.keystore
+.gradle/
+build/
+app/build/
+local.properties
+.idea/
+.DS_Store
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+*.swp
+*~
+.stackdump

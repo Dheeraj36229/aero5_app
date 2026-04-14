@@ -10,5 +10,6 @@
         <domain includeSubdomains="true">api.thingspeak.com</domain>
         <domain includeSubdomains="true">firebasedatabase.app</domain>
         <domain includeSubdomains="true">googleapis.com</domain>
+        <domain includeSubdomains="true">192.168.4.1</domain>
     </domain-config>
 </network-security-config>

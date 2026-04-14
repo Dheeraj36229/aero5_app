@@ -29,6 +29,7 @@
   --text:#EEF4FF; --text2:#8BA5C4; --text3:#4A6A8A;
   --topbar:rgba(5,10,20,0.90);
   --nav-bg:rgba(5,10,20,0.95);
+  --nav-active:rgba(0,194,255,0.12);
   --card-glow:rgba(0,194,255,0.04);
   --mode-icon:var(--text2);
   --shadow:0 4px 24px rgba(0,0,0,0.4);
@@ -42,6 +43,7 @@
   --text:#0A1628; --text2:#3A5A80; --text3:#8AAAC8;
   --topbar:rgba(240,246,255,0.92);
   --nav-bg:rgba(240,246,255,0.96);
+  --nav-active:rgba(0,100,180,0.08);
   --card-glow:rgba(0,100,180,0.03);
   --mode-icon:var(--text2);
   --shadow:0 4px 24px rgba(0,80,160,0.10);
@@ -127,15 +129,101 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .scroll::-webkit-scrollbar{display:none}
 
 /* ── BOTTOM NAV ── */
-.nav{position:fixed;bottom:0;left:0;right:0;padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 6px);background:var(--nav-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:100;transition:background var(--ease)}
-.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 6px;border-radius:14px;cursor:pointer;transition:all var(--ease);position:relative}
-.nav-tab.active{background:var(--cyan-dim)}
-.nav-tab svg{width:21px;height:21px;stroke:var(--text3);transition:stroke var(--ease)}
-.nav-tab.active svg{stroke:var(--cyan)}
-.nav-tab-label{font-size:8px;letter-spacing:1.5px;color:var(--text3);font-family:'Space Mono',monospace;transition:color var(--ease)}
-.nav-tab.active .nav-tab-label{color:var(--cyan)}
-.nav-badge{position:absolute;top:5px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg);display:none}
-.nav-badge.show{display:block}
+.nav {
+  position: fixed;
+  bottom: 24px;
+  left: 20px;
+  right: 20px;
+  height: 72px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid var(--border2); /* Boundary line using theme variable */
+  border-radius: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 12px;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-tab {
+  flex: 1;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 18px; /* Rounded square background for active state */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-tab.active {
+  background: var(--nav-active); /* Highlight background linked to theme */
+}
+
+.nav-tab svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--text3);
+  transition: all 0.3s ease;
+}
+
+.nav-tab.active svg {
+  stroke: var(--cyan);
+  transform: translateY(-1px);
+}
+
+.nav-tab-label {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.nav-tab.active .nav-tab-label {
+  color: var(--cyan);
+}
+
+/* Active Indicator Dot */
+.nav-indicator {
+  width: 4px;
+  height: 4px;
+  background: var(--cyan);
+  border-radius: 50%;
+  margin-top: 3px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.nav-tab.active .nav-indicator {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.nav-badge {
+  position: absolute;
+  top: 6px;
+  right: 22%;
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid #050A14;
+  box-shadow: 0 0 6px var(--red);
+  display: none;
+}
+.nav-badge.show { display: block; }
 
 /* ── TABS ── */
 .tab{display:none;animation:tabIn .28s ease both}
@@ -423,7 +511,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .key-toggle{position:absolute;right:14px;cursor:pointer;color:var(--text3);display:flex;align-items:center}
 .key-toggle svg{width:16px;height:16px}
 
-/* ─── ESP32 TAB ─── */
+/* ─── HARDWARE TAB ─── */
 .esp-hero{background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
 .esp-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow2),transparent)}
 .esp-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
@@ -458,13 +546,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .portal-btn{width:100%;padding:14px;border:none;border-radius:12px;cursor:pointer;font-family:'Orbitron',monospace;font-size:10px;font-weight:900;letter-spacing:2.5px;background:linear-gradient(135deg,rgba(0,255,179,.85),rgba(0,212,255,.7));color:#05080f;transition:all .2s;position:relative;overflow:hidden}
 .portal-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent)}
 .portal-btn:active{transform:scale(.97)}
-.portal-frame-wrap{width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--border2);margin-top:10px;background:var(--card);display:none}
-.portal-frame-wrap.open{display:block}
-.portal-frame-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
-.portal-frame-url{font-size:10px;font-family:'Space Mono',monospace;color:var(--muted2)}
-.portal-frame-x{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:0 2px;line-height:1;transition:color .2s}
-.portal-frame-x:active{color:var(--text)}
-iframe.portal-frame{width:100%;height:420px;border:none;display:block}
+.portal-frame-wrap{width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--border2);margin-top:10px;background:#fff;display:none;opacity:0;transform:translateY(10px);transition:all 0.3s ease;}
+.portal-frame-wrap.open{display:block;opacity:1;transform:translateY(0);}
+.portal-frame-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.portal-frame-url{font-size:10px;font-family:'Space Mono',monospace;color:var(--cyan);font-weight:600}
+.portal-frame-x{background:rgba(244,63,94,0.1);border:none;width:24px;height:24px;border-radius:6px;color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s}
+.portal-frame-x:active{transform:scale(0.9);background:rgba(244,63,94,0.2)}
+iframe.portal-frame{width:100%;height:520px;border:none;display:block;background:#fff}
 .fb-fields{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px}
 .fb-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .fb-row:last-child{border-bottom:none}
@@ -477,6 +565,19 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
 .score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow2),transparent)}
 .score-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin:12px 0 8px;overflow:hidden}
 .score-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--glow2),var(--glow));transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+/* AIRCARD MODAL */
+.aircard-overlay{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,0.95);display:none;align-items:center;justify-content:center;padding:20px;}
+.aircard-card{width:100%;max-width:340px;background:#050A14;border:2px solid var(--cyan);border-radius:24px;padding:24px;position:relative;overflow:hidden;box-shadow:0 0 40px var(--cyan-glow);}
+.aircard-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:20px 20px;opacity:0.2;}
+.aircard-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:relative;}
+.aircard-logo{font-family:'Orbitron';font-weight:900;font-size:18px;letter-spacing:4px;color:var(--cyan);}
+.aircard-body{position:relative;}
+.aircard-stat{margin-bottom:15px;}
+.aircard-label{font-family:'Space Mono';font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:4px;}
+.aircard-val{font-family:'Orbitron';font-size:24px;font-weight:800;color:var(--text);}
+.aircard-footer{margin-top:20px;padding-top:15px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:relative;}
+.aircard-qr{width:60px;height:60px;background:#fff;border-radius:8px;padding:4px;}
+
 </style>
 </head>
 <body>
@@ -569,9 +670,7 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
       <input class="field-input" id="maskKey" type="password" placeholder="Enter your key">
     </div>
     <button class="login-btn" id="loginBtn" onclick="doLogin()">CONNECT MASK</button>
-    <div style="text-align:center;margin-top:20px">
-      <a href="#" onclick="openInstructions()" style="color:var(--text3);font-size:10px;text-decoration:none;letter-spacing:1px;font-family:'Space Mono',monospace;border-bottom:1px solid var(--border);padding-bottom:2px">FIRST TIME USER? SETUP GUIDE</a>
-    </div>
+    <button class="login-btn" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border);margin-top:12px;letter-spacing:2px" onclick="openHardwareSetup()">FIRST TIME? SETUP DEVICE</button>
     <div class="login-err" id="loginErr"></div>
   </div>
 </div>
@@ -852,16 +951,6 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
       </div>
       <button class="sync-btn" id="syncBtn" onclick="doSync()">⚡ SYNC TO AERO5</button>
 
-      <div class="card" style="margin-top:12px">
-        <div class="section-title" style="margin-bottom:10px">DATA CHANNEL</div>
-        <div class="ch-row">
-          <div class="ch-pill active" onclick="setCh(this,'BLE 5.0')">BLE 5.0</div>
-          <div class="ch-pill" onclick="setCh(this,'Wi-Fi MQTT')">Wi-Fi MQTT</div>
-          <div class="ch-pill" onclick="setCh(this,'USB Serial')">USB Serial</div>
-          <div class="ch-pill" onclick="setCh(this,'LoRa 868')">LoRa 868</div>
-        </div>
-      </div>
-
       <div class="section-title">FILTER STATUS</div>
       <div class="fstat-row">
         <div class="fstat"><div class="fstat-val" style="color:var(--teal)">87%</div><div class="fstat-key">LIFE LEFT</div></div>
@@ -872,103 +961,235 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
 
     </div><!-- /mask -->
 
-
-    <!-- ══ ESP32 SETUP ══ -->
-    <div class="tab" id="tab-esp">
-
-      <div class="esp-hero">
-        <div class="esp-top">
-          <div class="esp-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--glow2)" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
-          </div>
-          <div>
-            <div class="esp-title">ESP32 Setup</div>
-            <div class="esp-sub">Connect your AERO5 hardware to WiFi using the built-in provisioning portal. Takes about 2 minutes.</div>
-          </div>
+    <!-- ══ BLE ══ -->
+    <div class="tab" id="tab-ble">
+      <div class="hero" style="text-align:center; padding: 30px 20px;">
+        <div class="splash-logo-ring" style="margin: 0 auto 20px;">
+          <svg viewBox="0 0 110 110" fill="none">
+            <circle cx="55" cy="55" r="50" stroke="var(--cyan)" stroke-width="1" stroke-dasharray="4 4" id="bleScanRing">
+              <animateTransform attributeName="transform" type="rotate" from="0 55 55" to="360 55 55" dur="10s" repeatCount="indefinite"/>
+            </circle>
+            <path d="M45 40l20 15-10 5v-20l10 5-20 15" stroke="var(--cyan)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <div class="esp-status">
-          <div class="esp-dot" id="espDot" style="background:var(--muted)"></div>
-          <div class="esp-stxt" id="espStxt">Not connected — follow the steps below</div>
+        <div class="aqi-label" id="bleStatus">BLE READY</div>
+        <div class="aqi-desc">Scan for your AERO5 mask to enable close-range synchronization.</div>
+        <button class="login-btn" id="bleScanBtn" onclick="startBleScan()">START SCANNING</button>
+      </div>
+
+      <div class="section-title">AVAILABLE DEVICES</div>
+      <div id="bleDeviceList">
+        <div class="card" style="text-align:center; color:var(--text3); font-size:11px; padding:30px;">
+          No devices found. Tap Start Scanning to search.
         </div>
       </div>
 
-      <div class="section-title">SETUP INSTRUCTIONS</div>
-      <div class="steps">
-        <div class="step active" id="step1">
-          <div class="step-num"><span class="step-nnum">1</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="step-body">
-            <div class="step-title">Power on your AERO5 mask</div>
-            <div class="step-desc">Connect the ESP32 to power via USB or battery. The onboard LED will blink rapidly — this means it is ready and broadcasting its setup WiFi hotspot.</div>
-            <span class="step-tag tag-info">LED blinks fast when ready</span>
+      <div class="section-title">BLE WIFI PROVISIONING</div>
+      <div class="card" id="bleWifiCard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(123,94,167,0.1);border:1px solid rgba(123,94,167,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M5 7l14 10-7 5V2l7 5L5 17"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:1px">Direct BLE Setup</div>
+            <div style="font-size:10px;color:var(--text3)" id="bleWifiStatus">Connect in BLE tab first</div>
           </div>
         </div>
+        <div class="field">
+          <div class="field-label"><span class="field-dot"></span>WIFI SSID</div>
+          <input class="field-input" id="bleSsid" placeholder="Your WiFi Name" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <div class="field-label"><span class="field-dot"></span>WIFI PASSWORD</div>
+          <input class="field-input" id="blePass" type="password" placeholder="Your WiFi Password">
+        </div>
+        <button class="login-btn" id="bleWifiBtn" onclick="sendBleWifi()" style="background:linear-gradient(130deg, var(--purple), #A855F7); color:white; border:none; box-shadow:0 0 15px rgba(123,94,167,0.3)">SEND VIA BLE</button>
+      </div>
+    </div>
 
-        <div class="step" id="step2">
-          <div class="step-num"><span class="step-nnum">2</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="step-body">
-            <div class="step-title">Connect your phone to AERO5 hotspot</div>
-            <div class="step-desc">Open your phone's WiFi settings and connect to the AERO5 hotspot using the credentials below. Return to this app after connecting.</div>
-            <div class="cred-row">
-              <div class="cred-box"><div class="cred-key">WIFI NAME</div><div class="cred-val">AERO5_SETUP</div></div>
-              <div class="cred-box"><div class="cred-key">PASSWORD</div><div class="cred-val">aero51234</div></div>
+    <div class="tab" id="tab-wifi">
+      <div class="section-title" style="letter-spacing:5px">CONFIGURATION WIZARD</div>
+      <div style="height:2px; background:linear-gradient(90deg, var(--cyan) 0%, var(--teal) 100%); margin-bottom:20px; opacity:0.6; border-radius:1px"></div>
+
+      <div class="steps">
+        <!-- Step 1 -->
+        <div class="step active" id="step1" style="background:rgba(0,194,255,0.03); border:1.2px solid rgba(0,194,255,0.15); border-radius:22px; padding:20px; margin-bottom:12px">
+          <div style="display:flex; align-items:flex-start; gap:18px">
+            <div style="width:36px; height:36px; border-radius:50%; border:1.5px solid var(--cyan); display:flex; align-items:center; justify-content:center; color:var(--cyan); font-family:'Orbitron'; font-weight:800; font-size:12px; flex-shrink:0">1</div>
+            <div style="flex:1">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+                <div style="font-size:15px; font-weight:700; letter-spacing:0.5px">Power On</div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="3" id="chk1" style="opacity:0.3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div style="font-size:11px; color:var(--text2); line-height:1.6">Connect the mask to power. Ensure the blue LED is blinking rapidly.</div>
+              <div style="font-size:12px; color:var(--text); font-family:'Space Mono'; margin-top:8px; letter-spacing:0.5px">Ready for pairing</div>
             </div>
           </div>
         </div>
 
-        <div class="step" id="step3">
-          <div class="step-num"><span class="step-nnum">3</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="step-body">
-            <div class="step-title">Open the device portal</div>
-            <div class="step-desc">Tap the button below to open the ESP32 web portal directly inside this app. Enter your home WiFi name and password so the mask can reach the internet and sync with Firebase.</div>
+        <!-- Step 2 -->
+        <div class="step" id="step2" style="background:rgba(0,255,170,0.03); border:1.2px solid rgba(0,255,170,0.15); border-radius:22px; padding:20px; margin-bottom:12px">
+          <div style="display:flex; align-items:flex-start; gap:18px">
+            <div style="width:36px; height:36px; border-radius:50%; border:1.5px solid var(--teal); display:flex; align-items:center; justify-content:center; color:var(--teal); font-family:'Orbitron'; font-weight:800; font-size:12px; flex-shrink:0">2</div>
+            <div style="flex:1">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+                <div style="font-size:15px; font-weight:700; letter-spacing:0.5px">Connect WiFi</div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" id="chk2" style="opacity:0.3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div style="font-size:11px; color:var(--text2); line-height:1.6">Join the AERO5 hotspot using the credentials below. <br><b style="color:var(--amber); text-transform:uppercase; font-size:9px">Pro-tip: Turn off mobile data for a stable link.</b></div>
+
+              <div style="display:flex; gap:10px; margin-top:15px">
+                <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:10px">
+                  <div style="font-size:8px; color:var(--text3); letter-spacing:1px; margin-bottom:4px">HOTSPOT SSID</div>
+                  <div style="display:flex; align-items:center; justify-content:space-between">
+                    <span style="font-family:'Space Mono'; font-size:11px; color:var(--cyan); font-weight:700">AERO5_SETUP</span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="opacity:0.5" onclick="copyText('AERO5_SETUP')"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </div>
+                </div>
+                <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:10px">
+                  <div style="font-size:8px; color:var(--text3); letter-spacing:1px; margin-bottom:4px">PASSWORD</div>
+                  <div style="display:flex; align-items:center; justify-content:space-between">
+                    <span style="font-family:'Space Mono'; font-size:11px; color:var(--cyan); font-weight:700">aero51234</span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="opacity:0.5" onclick="copyText('aero51234')"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="step" id="step4">
-          <div class="step-num"><span class="step-nnum">4</span><svg class="step-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="step-body">
-            <div class="step-title">Mask connects and starts syncing</div>
-            <div class="step-desc">After you save WiFi credentials, the ESP32 restarts, connects to your network, reads AQI and filter data from Firebase, and automatically controls the fan speed.</div>
-            <span class="step-tag tag-wait" id="step4Tag">Waiting for WiFi credentials...</span>
+        <!-- Step 3 -->
+        <div class="step" id="step3" style="background:rgba(0,194,255,0.02); border:1.2px solid rgba(0,194,255,0.1); border-radius:22px; padding:20px; margin-bottom:12px">
+          <div style="display:flex; align-items:flex-start; gap:18px">
+            <div style="width:36px; height:36px; border-radius:50%; border:1.5px solid var(--text3); display:flex; align-items:center; justify-content:center; color:var(--text3); font-family:'Orbitron'; font-weight:800; font-size:12px; flex-shrink:0">3</div>
+            <div style="flex:1">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+                <div style="font-size:15px; font-weight:700; letter-spacing:0.5px">Portal Access</div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="3" id="chk3" style="opacity:0.3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div style="font-size:11px; color:var(--text2); line-height:1.6">Enter your home WiFi details in the configuration portal.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step" id="step4" style="background:rgba(0,194,255,0.02); border:1.2px solid rgba(0,194,255,0.1); border-radius:22px; padding:20px; margin-bottom:12px">
+          <div style="display:flex; align-items:flex-start; gap:18px">
+            <div style="width:36px; height:36px; border-radius:50%; border:1.5px solid var(--cyan); box-shadow:0 0 10px var(--cyan-glow); display:flex; align-items:center; justify-content:center; color:var(--cyan); font-family:'Orbitron'; font-weight:800; font-size:12px; flex-shrink:0">4</div>
+            <div style="flex:1">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+                <div style="font-size:15px; font-weight:700; letter-spacing:0.5px">Finalizing</div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="3" id="chk4" style="opacity:0.3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div style="font-size:11px; color:var(--text2); line-height:1.6">Wait for the mask to restart and connect to the cloud.</div>
+              <div style="font-size:12px; color:var(--text); font-family:'Space Mono'; margin-top:8px; letter-spacing:0.5px">Awaiting confirmation</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="section-title">DEVICE PORTAL</div>
+      <div class="section-title">SETUP PORTAL</div>
       <div class="portal-card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
-          <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,255,179,.08);border:1px solid rgba(0,255,179,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--glow2)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--cyan-dim);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20"/></svg>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:700;margin-bottom:1px">ESP32 Web Portal</div>
-            <div style="font-size:10px;color:var(--muted2)">192.168.4.1 · Must be on AERO5_SETUP WiFi</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:1px">Portal Address: 192.168.4.1</div>
+            <div style="font-size:10px;color:var(--text2)">Must be on AERO5_SETUP WiFi to work</div>
           </div>
         </div>
-        <button class="portal-btn" id="portalBtn" onclick="togglePortal()">OPEN DEVICE PORTAL</button>
+        <button class="portal-btn" id="portalBtn" onclick="togglePortal()">OPEN SETUP PORTAL</button>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="portal-btn" style="background:var(--surface2); color:var(--cyan); border:1px solid var(--border2); flex:1;" onclick="ab('OPEN_URL',{url:'http://192.168.4.1'})">BROWSER SETUP</button>
+          <button class="portal-btn" style="background:var(--surface2); color:var(--teal); border:1px solid var(--border2); flex:1;" onclick="location.reload()">REFRESH APP</button>
+        </div>
         <div class="portal-frame-wrap" id="portalWrap">
           <div class="portal-frame-hdr">
-            <span class="portal-frame-url">http://192.168.4.1 — AERO5 Setup Portal</span>
+            <span class="portal-frame-url">http://192.168.4.1 — AERO5 Setup</span>
             <button class="portal-frame-x" onclick="closePortal()">×</button>
           </div>
           <iframe class="portal-frame" id="portalFrame" src="about:blank"></iframe>
         </div>
-        <div style="margin-top:10px;font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;line-height:1.65;letter-spacing:.3px">
-          If the portal does not load, ensure your phone is connected to AERO5_SETUP WiFi, then tap the button again.
+        <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;line-height:1.65;letter-spacing:.3px">
+          If the portal doesn't load, try opening it in your <span style="color:var(--cyan);text-decoration:underline" onclick="ab('OPEN_URL',{url:'http://192.168.4.1'})">External Browser</span>.
         </div>
       </div>
 
-      <div class="section-title">DATA SENT TO ESP32 (Firebase)</div>
-      <div class="fb-fields">
-        <div class="fb-row"><span class="fb-k">aqi</span><span class="fb-v" id="fbAqi">--</span></div>
-        <div class="fb-row"><span class="fb-k">filter %</span><span class="fb-v" id="fbFilter">--</span></div>
-        <div class="fb-row"><span class="fb-k">breathing_rate</span><span class="fb-v" id="fbBreath">--</span></div>
-        <div class="fb-row"><span class="fb-k">effective_filtration</span><span class="fb-v" id="fbEff">--</span></div>
-        <div class="fb-row"><span class="fb-k">ml_warning</span><span class="fb-v" id="fbWarn">--</span></div>
-        <div class="fb-row"><span class="fb-k">source</span><span class="fb-v" id="fbSrc">--</span></div>
-        <div class="fb-row" style="border-bottom:none"><span class="fb-k">timestamp</span><span class="fb-v" id="fbTs" style="font-size:9px">--</span></div>
+      <div class="section-title">LIVE DEVICE FEED</div>
+      <div class="fb-fields" style="background:var(--surface); border:1px solid var(--border2); border-radius:20px; padding:15px; margin-bottom:12px">
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">AQI</span>
+          <span style="color:var(--cyan); font-weight:700" id="fbAqi">--</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">FILTRATION %</span>
+          <span style="color:var(--cyan); font-weight:700" id="fbFilter">--</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">BREATH RATE</span>
+          <span style="color:var(--cyan); font-weight:700"><span id="fbBreath">--</span> br/min</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">EFFECTIVE %</span>
+          <span style="color:var(--cyan); font-weight:700" id="fbEff">--</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">WARNING</span>
+          <span style="color:var(--teal); font-weight:700" id="fbWarn">Normal</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-family:'Space Mono'; font-size:11px">
+          <span style="color:var(--text3); letter-spacing:1px">DATA SOURCE</span>
+          <span style="color:var(--cyan); font-weight:700">android_bg</span>
+        </div>
+        <div class="fb-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; font-family:'Space Mono'; font-size:10px">
+          <span style="color:var(--text3); letter-spacing:1px">LAST SYNC</span>
+          <span style="color:var(--cyan); opacity:0.8" id="fbTs">--</span>
+        </div>
       </div>
 
-    </div><!-- /esp -->
+    </div><!-- /wifi -->
+
+    <!-- ══ ROUTES ══ -->
+    <div class="tab" id="tab-routes">
+      <div class="hero">
+        <div class="hero-top">
+          <div class="hero-loc">
+            <div class="city" id="routeStreet">Street tracking inactive</div>
+            <div class="coords" id="routeCoords">-- N · -- E</div>
+          </div>
+          <div class="live-chip" style="background:var(--cyan-dim); color:var(--cyan); border-color:var(--cyan-glow)">
+            <div class="live-dot" style="background:var(--cyan)"></div>GPS ACTIVE
+          </div>
+        </div>
+        <div style="height:120px; background:var(--bg2); border:1px solid var(--border); border-radius:14px; margin:15px 0; position:relative; overflow:hidden;">
+          <div class="bg-mesh" style="opacity:0.3"></div>
+          <div id="routePath" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--text3); font-family:'Space Mono'; font-size:10px;">
+            ROUTE VISUALIZATION READY
+          </div>
+        </div>
+        <button class="login-btn" onclick="toggleRouteTracking()" id="routeBtn">START TRACKING</button>
+      </div>
+
+      <div class="section-title">ROUTE PERFORMANCE</div>
+      <div class="card" style="padding:20px; text-align:center; position:relative; overflow:hidden">
+        <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--cyan),transparent)"></div>
+        <div style="font-family:'Orbitron'; font-size:42px; font-weight:900; background:linear-gradient(130deg,var(--cyan),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px var(--cyan-glow))" id="routeScore">--</div>
+        <div style="font-size:9px; letter-spacing:3px; color:var(--text3); font-family:'Space Mono'; margin-top:4px">PROTECTION SCORE</div>
+        <div style="font-size:11px; color:var(--text2); margin-top:8px; line-height:1.5">Route filtering efficiency based on local AQI</div>
+        <div style="height:5px; border-radius:3px; background:var(--surface3); margin-top:15px; overflow:hidden">
+          <div style="height:100%; border-radius:3px; background:linear-gradient(90deg,var(--cyan),var(--teal)); width:0%" id="routeScoreFill"></div>
+        </div>
+        <button class="login-btn" style="margin-top:15px; background:var(--surface2); color:var(--cyan); border:1px solid var(--cyan-dim); font-size:9px; letter-spacing:2px" onclick="showToast('REPORT','Generating detailed route air quality report...')">GENERATE ROUTE REPORT</button>
+      </div>
+
+      <div class="section-title">RECENT LOCATIONS</div>
+      <div id="routeHistory">
+        <div class="card" style="text-align:center; color:var(--text3); font-size:11px; padding:20px;">
+          No route history recorded.
+        </div>
+      </div>
+    </div>
 
     <!-- ══ HEALTH ══ -->
     <div class="tab" id="tab-health">
@@ -979,6 +1200,7 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
         <div class="protect-label">TODAY'S EFFECTIVENESS</div>
         <div class="protect-sub" id="protectSub">AERO5 filtered 72% of harmful particles today</div>
         <div class="protect-bar"><div class="protect-bar-fill" id="protectBarFill" style="width:72%"></div></div>
+        <button class="login-btn" style="margin-top:15px; background:var(--surface2); color:var(--teal); border:1px solid var(--teal-dim);" onclick="generateAirCard()">GENERATE AIRCARD</button>
       </div>
 
       <div class="exp-row">
@@ -1045,17 +1267,23 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
           <circle cx="24" cy="23" r="1.8" fill="url(#lg3)"/>
         </svg>
         <div class="about-wordmark">AERO5</div>
-        <div class="about-ver" id="appVersionDisplay">FIRMWARE v2.4.1 · APP v--</div>
-        <div id="updateContainer" style="display:none; margin-top:12px;">
-          <button class="sync-btn" id="updateBtn" onclick="downloadUpdate()" style="background:linear-gradient(130deg, var(--amber), var(--red)); color:white;">
-            NEW UPDATE AVAILABLE!
-          </button>
-          <div id="updateInfo" style="font-size:10px; color:var(--text3); margin-top:6px; font-family:'Space Mono',monospace;"></div>
-        </div>
+        <div class="about-ver">FIRMWARE v2.4.1 · APP v5.0.0</div>
         <div class="about-divider"></div>
         <div class="about-stats">
           <div><div class="about-stat-val" id="aboutSyncs">0</div><div class="about-stat-key">TOTAL SYNCS</div></div>
           <div><div class="about-stat-val" id="aboutUptime">0m</div><div class="about-stat-key">SESSION TIME</div></div>
+        </div>
+      </div>
+
+      <div class="section-title">DEVICE SETUP</div>
+      <div class="settings-group">
+        <div class="srow" onclick="switchTab('ble')">
+          <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M5 7l14 10-7 5V2l7 5L5 17"/></svg></div><div><div class="srow-title">Bluetooth Setup</div><div class="srow-sub">Scan and pair via BLE 5.0</div></div></div>
+          <div class="srow-val" style="color:var(--cyan)">OPEN</div>
+        </div>
+        <div class="srow" onclick="switchTab('wifi')">
+          <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg></div><div><div class="srow-title">WiFi Hotspot Setup</div><div class="srow-sub">Configuration via AERO5 portal</div></div></div>
+          <div class="srow-val" style="color:var(--teal)">OPEN</div>
         </div>
       </div>
 
@@ -1109,7 +1337,7 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
           <div class="srow-val on">AUTH ✓</div>
         </div>
         <div class="srow">
-          <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg></div><div><div class="srow-title">ESP32</div><div class="srow-sub">240MHz dual-core · 4MB flash</div></div></div>
+          <div class="srow-left"><div class="srow-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg></div><div><div class="srow-title">Hardware Status</div><div class="srow-sub">Dual-core processing · 4MB Flash</div></div></div>
           <div class="srow-val">READY</div>
         </div>
         <div class="srow">
@@ -1145,26 +1373,49 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
     <div class="nav-tab active" id="nav-home" onclick="switchTab('home')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <div class="nav-tab-label">HOME</div>
+      <div class="nav-indicator"></div>
     </div>
     <div class="nav-tab" id="nav-mask" onclick="switchTab('mask')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L4 6v5c0 5.25 3.5 10.15 8 11.4C16.5 21.15 20 16.25 20 11V6l-8-4z"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
       <div class="nav-tab-label">MASK</div>
+      <div class="nav-indicator"></div>
     </div>
-    <div class="nav-tab" id="nav-esp" onclick="switchTab('esp')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
-      <div class="nav-tab-label">ESP32</div>
-      <div class="nav-badge" id="espBadge"></div>
+    <div class="nav-tab" id="nav-routes" onclick="switchTab('routes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div class="nav-tab-label">ROUTES</div>
+      <div class="nav-indicator"></div>
     </div>
+
+    <!-- Setup Tabs (Hidden in standard mode) -->
+    <div class="nav-tab" id="nav-ble" onclick="switchTab('ble')" style="display:none !important">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M5 7l14 10-7 5V2l7 5L5 17"/></svg>
+      <div class="nav-tab-label">BLE</div>
+      <div class="nav-indicator"></div>
+    </div>
+    <div class="nav-tab" id="nav-wifi" onclick="switchTab('wifi')" style="display:none !important">
+      <div style="position:relative">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+        <div class="nav-badge" id="wifiNotice"></div>
+      </div>
+      <div class="nav-tab-label">WIFI</div>
+      <div class="nav-indicator"></div>
+    </div>
+
     <div class="nav-tab" id="nav-health" onclick="switchTab('health')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><polyline points="3 12 6 12 8 6 11 18 13 10 16 14 18 12 21 12"/></svg>
       <div class="nav-tab-label">HEALTH</div>
-      <div class="nav-badge" id="healthBadge"></div>
+      <div class="nav-indicator"></div>
     </div>
     <div class="nav-tab" id="nav-settings" onclick="switchTab('settings')">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <div class="nav-tab-label">SETTINGS</div>
+      <div class="nav-indicator"></div>
     </div>
   </div>
+
+  <!-- GUEST EXIT BUTTON -->
+  <button id="guestExitBtn" onclick="doLogout()" style="display:none;position:fixed;bottom:110px;left:50%;transform:translateX(-50%);z-index:1100;padding:12px 24px;border-radius:24px;background:var(--surface);border:1.5px solid var(--red);color:var(--red);font-family:'Orbitron',monospace;font-size:10px;font-weight:800;letter-spacing:2px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow)">EXIT SETUP</button>
+
 
 <!-- ══════════ CHANGE KEY MODAL ══════════ -->
 <div class="modal-overlay" id="changeKeyModal" onclick="handleModalOverlayClick(event)">
@@ -1230,98 +1481,257 @@ iframe.portal-frame{width:100%;height:420px;border:none;display:block}
 
 </div><!-- /appScreen -->
 
+<!-- AIRCARD MODAL -->
+<div class="aircard-overlay" id="aircardOverlay" onclick="this.style.display='none'">
+  <div class="aircard-card">
+    <div class="aircard-grid"></div>
+    <div class="aircard-hdr">
+      <div class="aircard-logo">AERO5</div>
+      <div style="font-family:'Space Mono'; font-size:9px; color:var(--cyan);">REPORT_ID: #A5-9921</div>
+    </div>
+    <div class="aircard-body">
+      <div class="aircard-stat">
+        <div class="aircard-label">DAILY PROTECTION</div>
+        <div class="aircard-val" id="acProtect">92%</div>
+      </div>
+      <div class="aircard-stat">
+        <div class="aircard-label">PEAK AQI EXPOSURE</div>
+        <div class="aircard-val" id="acPeak" style="color:var(--red);">184</div>
+      </div>
+      <div class="aircard-stat">
+        <div class="aircard-label">CLEAN AIR DELIVERED</div>
+        <div class="aircard-val">4.2 Liters</div>
+      </div>
+    </div>
+    <div class="aircard-footer">
+      <div>
+        <div style="font-family:'Orbitron'; font-size:10px; color:var(--teal);">VERIFIED STATUS</div>
+        <div style="font-family:'Space Mono'; font-size:8px; color:var(--text3);">SECURED BY BLOCKCHAIN</div>
+      </div>
+      <div class="aircard-qr">
+        <svg viewBox="0 0 100 100"><rect width="100" height="100" fill="white"/><rect x="10" y="10" width="20" height="20"/><rect x="70" y="10" width="20" height="20"/><rect x="10" y="70" width="20" height="20"/><rect x="40" y="40" width="20" height="20"/><rect x="70" y="70" width="20" height="20"/><rect x="10" y="40" width="10" height="10"/><rect x="40" y="10" width="10" height="10"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script>
-/* ═══ ESP32 PORTAL ═══ */
+/* ═══ HARDWARE PORTAL ═══ */
 let portalOpen=false;
+
 function togglePortal(){
   portalOpen=!portalOpen;
   const wrap=document.getElementById('portalWrap');
   const btn=document.getElementById('portalBtn');
   const iframe=document.getElementById('portalFrame');
-  if(portalOpen){
-    wrap.classList.add('open');
-    btn.textContent='CLOSE PORTAL';
-    iframe.src='http://192.168.4.1';
-    document.getElementById('step3').classList.add('active');
-    document.getElementById('espDot').style.background='var(--amber)';
-    document.getElementById('espStxt').textContent='Portal loading... make sure you are on AERO5_SETUP WiFi';
 
-    // Fallback timer: if iframe doesn't load after 5s, suggest system browser
-    setTimeout(() => {
-        if(portalOpen && iframe.src === 'http://192.168.4.1') {
-            document.getElementById('espStxt').textContent = 'Portal slow? Ensure WiFi is connected to AERO5_SETUP.';
-        }
-    }, 5000);
+  if(portalOpen){
+    // Reset iframe to trigger a fresh connection ONLY when opened
+    // Pre-loading can cause 'Connection Aborted' if WiFi isn't ready yet
+    iframe.src='http://192.168.4.1/';
+
+    wrap.style.display='block';
+    setTimeout(()=>wrap.classList.add('open'), 10);
+    btn.textContent='CLOSE PORTAL';
+    document.getElementById('step3').classList.add('active');
+    document.getElementById('hardwareDot').style.background='var(--amber)';
+    document.getElementById('hardwareStxt').textContent='Connecting to portal... Ensure you are on AERO5_SETUP WiFi';
   }else{closePortal();}
 }
 function closePortal(){
   portalOpen=false;
-  document.getElementById('portalWrap').classList.remove('open');
-  document.getElementById('portalBtn').textContent='OPEN DEVICE PORTAL';
-  document.getElementById('portalFrame').src='about:blank';
+  const wrap=document.getElementById('portalWrap');
+  const iframe=document.getElementById('portalFrame');
+  wrap.classList.remove('open');
+  // Clear src to free resources and stop connection attempts
+  iframe.src='about:blank';
+  setTimeout(()=>{ if(!portalOpen) wrap.style.display='none'; }, 300);
+  document.getElementById('portalBtn').textContent='OPEN SETUP PORTAL';
 }
 
-function openInstructions(){
-  MASK_ID = 'NEW_USER';
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('appScreen').style.display='flex';
-  document.getElementById('topMaskId').textContent = 'SETUP';
-  switchTab('esp');
-  // Just initialize some basic UI without full background services
-  renderFilter(72);
+/* ═══ UPDATE HARDWARE DISPLAY ═══ */
+/* ═══════════════ BLE LOGIC ═══════════════ */
+let bleDevices = [];
+let isScanningBle = false;
+
+function startBleScan() {
+    if (isScanningBle) return;
+    isScanningBle = true;
+    bleDevices = [];
+    document.getElementById('bleDeviceList').innerHTML = '<div class="card" style="text-align:center; padding:30px;"><div class="splash-loader" style="margin:0 auto 10px;"></div><div style="font-size:10px; color:var(--text3); font-family:\'Space Mono\';">SCANNING FOR MASK...</div></div>';
+    document.getElementById('bleScanBtn').textContent = 'STOP SCANNING';
+    document.getElementById('bleScanRing').setAttribute('stroke', 'var(--amber)');
+    ab('BLE_SCAN', {});
 }
 
-/* ═══ UPDATE CHECKER ═══ */
-let latestUpdateUrl = "";
+window.addEventListener('ble_scan_started', () => {
+    isScanningBle = true;
+});
 
-async function checkUpdates() {
-  try {
-    const currentVersion = window.AndroidBridge ? window.AndroidBridge.getAppVersion() : "0.0.0";
-    const currentVersionCode = window.AndroidBridge ? window.AndroidBridge.getAppVersionCode() : 0;
-
-    document.getElementById('appVersionDisplay').textContent = `FIRMWARE v2.4.1 · APP v${currentVersion}`;
-
-    // Fetch update info from GitHub (via the release tag convention used in CI)
-    // Or from the Firebase DB which is updated by the CI/CD
-    const snap = await db.ref('app_update').get();
-    if (snap.exists()) {
-      const data = snap.val();
-      const latestVersionCode = data.latest_version;
-      latestUpdateUrl = data.apk_url;
-
-      if (latestVersionCode > currentVersionCode) {
-        document.getElementById('updateContainer').style.display = 'block';
-        document.getElementById('updateInfo').textContent = `New version available (v${latestVersionCode})`;
-
-        // Notify the user immediately on app open
-        showToast('Update Available', `A new version (v${latestVersionCode}) is ready. Go to Settings to install.`);
-      }
+window.addEventListener('ble_scan_finished', () => {
+    isScanningBle = false;
+    document.getElementById('bleScanBtn').textContent = 'START SCANNING';
+    document.getElementById('bleScanRing').setAttribute('stroke', 'var(--cyan)');
+    if (bleDevices.length === 0) {
+        document.getElementById('bleDeviceList').innerHTML = '<div class="card" style="text-align:center; color:var(--text3); font-size:11px; padding:30px;">No devices found. Ensure Bluetooth is on.</div>';
     }
-  } catch (e) {
-    console.error("Update check failed", e);
-  }
+});
+
+window.addEventListener('ble_device_found', (e) => {
+    const dev = e.detail;
+    if (bleDevices.some(d => d.address === dev.address)) return;
+    bleDevices.push(dev);
+    renderBleDevices();
+});
+
+function renderBleDevices() {
+    const list = document.getElementById('bleDeviceList');
+    list.innerHTML = bleDevices.map(d => `
+        <div class="card" style="padding:16px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:700; font-size:13px; font-family:'Orbitron'; color:var(--cyan);">${d.name}</div>
+            <div style="font-size:10px; color:var(--text3); font-family:'Space Mono'; margin-top:3px;">${d.address} · RSSI: ${d.rssi}</div>
+          </div>
+          <button class="login-btn" style="width:auto; padding:8px 16px; margin-top:0;" onclick="connectBle('${d.address}')">CONNECT</button>
+        </div>
+    `).join('');
 }
 
-function downloadUpdate() {
-  if (latestUpdateUrl && window.AndroidBridge) {
-    window.AndroidBridge.openUrl(latestUpdateUrl);
-  } else if (latestUpdateUrl) {
-    window.open(latestUpdateUrl, '_blank');
-  }
+function connectBle(addr) {
+    document.getElementById('bleStatus').textContent = 'CONNECTING...';
+    ab('BLE_CONNECT', {address: addr});
 }
 
-/* ═══ UPDATE ESP DISPLAY ═══ */
-function updateEspDisplay(aqi,filter,breath,eff,warning,ts){
+window.addEventListener('ble_connected', () => {
+    document.getElementById('bleStatus').textContent = 'MASK CONNECTED';
+    document.getElementById('bleWifiStatus').textContent = 'READY TO SEND';
+    document.getElementById('bleWifiStatus').style.color = 'var(--teal)';
+    document.getElementById('bleWifiBtn').disabled = false;
+    showToast('BLE Connected', 'Secure link established with AERO5 mask.');
+});
+
+window.addEventListener('ble_disconnected', () => {
+    document.getElementById('bleStatus').textContent = 'BLE READY';
+    document.getElementById('bleWifiStatus').textContent = 'Connect in BLE tab first';
+    document.getElementById('bleWifiStatus').style.color = 'var(--text3)';
+    document.getElementById('bleWifiBtn').disabled = true;
+    showToast('BLE Disconnected', 'Connection lost.');
+});
+
+window.addEventListener('ble_wifi_sent', () => {
+    showToast('WiFi Sent', 'Credentials transmitted to AERO5. Waiting for device to connect...');
+    document.getElementById('bleWifiBtn').textContent = 'SENT ✓';
+    setTimeout(() => {
+        document.getElementById('bleWifiBtn').textContent = 'SEND VIA BLE';
+    }, 3000);
+});
+
+function sendBleWifi() {
+    const ssid = document.getElementById('bleSsid').value;
+    const pass = document.getElementById('blePass').value;
+    if (!ssid) { showToast('SSID Missing', 'Please enter a WiFi name.'); return; }
+    ab('BLE_SEND_WIFI', {ssid, pass});
+}
+
+/* ═══════════════ ROUTES & GPS LOGIC ═══════════════ */
+let isTrackingRoute = false;
+let routePoints = [];
+let routeWatchId = null;
+
+function toggleRouteTracking() {
+    isTrackingRoute = !isTrackingRoute;
+    const btn = document.getElementById('routeBtn');
+    if (isTrackingRoute) {
+        btn.textContent = 'STOP TRACKING';
+        btn.style.background = 'var(--red)';
+        routePoints = [];
+        startGpsTracking();
+    } else {
+        btn.textContent = 'START TRACKING';
+        btn.style.background = 'linear-gradient(130deg,var(--cyan),var(--teal))';
+        stopGpsTracking();
+    }
+}
+
+function startGpsTracking() {
+    if (!navigator.geolocation) return;
+    routeWatchId = navigator.geolocation.watchPosition(pos => {
+        const {latitude: lat, longitude: lon} = pos.coords;
+        routePoints.push({lat, lon, time: Date.now()});
+        document.getElementById('routeCoords').textContent = `${lat.toFixed(4)}°N · ${lon.toFixed(4)}°E`;
+
+        // Call bridge for street name every 30 seconds or if moved significantly
+        if (routePoints.length === 1 || (Date.now() - lastStreetCall > 30000)) {
+            ab('GET_STREET_NAME', {lat, lon});
+            lastStreetCall = Date.now();
+        }
+    }, err => console.error(err), {enableHighAccuracy: true});
+}
+let lastStreetCall = 0;
+
+function stopGpsTracking() {
+    if (routeWatchId) navigator.geolocation.clearWatch(routeWatchId);
+}
+
+window.addEventListener('street_name_resolved', (e) => {
+    const {street} = e.detail;
+    document.getElementById('routeStreet').textContent = street;
+    addRouteHistory(street);
+});
+
+function addRouteHistory(street) {
+    const hist = document.getElementById('routeHistory');
+    const existing = hist.querySelector('.card-empty');
+    if (existing) hist.innerHTML = '';
+
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.padding = '12px 16px';
+    div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:600; font-size:12px; color:var(--text);">${street}</div>
+          <div style="font-size:9px; color:var(--text3); font-family:'Space Mono';">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+        </div>
+        <div style="font-size:9px; color:var(--text3); margin-top:4px;">AQI in this area: ${curAQI} · Protection Active</div>
+    `;
+    hist.prepend(div);
+}
+
+/* ═══════════════ AIRCARD GENERATOR ═══════════════ */
+function generateAirCard() {
+    document.getElementById('acProtect').textContent = document.getElementById('protectScore').textContent + '%';
+    document.getElementById('acPeak').textContent = Math.max(...aqiHistory, curAQI);
+    document.getElementById('aircardOverlay').style.display = 'flex';
+    ab('GENERATE_REPORT', {score: curFilter, aqi: curAQI});
+}
+
+function updateHardwareDisplay(aqi,filter,breath,eff,warning,ts){
   const g=id=>document.getElementById(id);
   if(g('fbAqi')) g('fbAqi').textContent=aqi;
   if(g('fbFilter')) g('fbFilter').textContent=filter+'%';
   if(g('fbBreath')) g('fbBreath').textContent=breath+' br/min';
   if(g('fbEff')) g('fbEff').textContent=eff+'%';
-  if(g('fbWarn')){g('fbWarn').textContent=warning;g('fbWarn').style.color=warning==='Normal'?'var(--glow2)':'var(--red)';}
+  if(g('fbWarn')){g('fbWarn').textContent=warning;g('fbWarn').style.color=warning==='Normal'?'var(--teal)':'var(--red)';}
   if(g('fbSrc')) g('fbSrc').textContent='ml_auto';
   if(g('fbTs')) g('fbTs').textContent=ts?ts.replace('T',' ').split('.')[0]:'--';
 }
+
+/* ═══ AUTO UPDATE SYSTEM ═══ */
+const CURRENT_VERSION = "5.0.0";
+async function checkForUpdates() {
+    try {
+        // Use a persistent link to a version.json on your GitHub
+        const res = await fetch('https://raw.githubusercontent.com/dheeraj-mca/AERO5-ML-Connected/main/version.json');
+        const data = await res.json();
+        if(data.version !== CURRENT_VERSION) {
+            if(confirm(`New Update Available (v${data.version})!\n\nChanges: ${data.changelog}\n\nWould you like to download it now?`)) {
+                ab('DOWNLOAD_UPDATE', {url: data.apk_url});
+            }
+        }
+    } catch(e) { console.log("Update check failed", e); }
+}
+setTimeout(checkForUpdates, 5000); // Check 5s after launch
 
 /* ═══ SCORE CARD ═══ */
 function updateScore(filter){
@@ -1389,7 +1799,7 @@ const HEALTH_DATA = {
 let MASK_ID = '', curAQI = 0, curFilter = 72, curMode = 'auto', curChannel = 'BLE 5.0';
 let lastSentTime = 0, lastSentAQI = -1, syncCount = 0, sessionStart = Date.now();
 let forecastBuilt = false, aqiHistory = [], alertsEnabled = true, alertLastAQI = -999;
-let rawPollutants = null; // real values from WAQI
+let rawPollutants = null, isGuest = false; // real values from WAQI
 
 /* ═══════════ ML STATE ═══════════ */
 // GET endpoint: /predict?aqi=X&breathing=Y&activity=Z
@@ -1453,6 +1863,12 @@ function applyTheme(dark){
   const bgCol = dark ? '#050A14' : '#F0F6FF';
   ab('THEME_CHANGE', {dark, bg: bgCol});
   localStorage.setItem('aero5_theme', dark ? '1' : '0');
+
+  // Update nav-tab colors based on theme if active
+  const activeTab = document.querySelector('.nav-tab.active');
+  if(activeTab) {
+    activeTab.style.background = dark ? 'rgba(0, 194, 255, 0.12)' : 'rgba(0, 100, 180, 0.1)';
+  }
 }
 function toggleTheme(){
   applyTheme(!isDark);
@@ -1481,11 +1897,60 @@ async function doLogin(){
 }
 
 function launchApp(){
+  isGuest = false;
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('appScreen').style.display='flex';
   document.getElementById('topMaskId').textContent = MASK_ID;
   document.getElementById('settingsMaskId').textContent = MASK_ID;
+
+  // Restore standard navigation visibility
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    if(tab.id === 'nav-ble' || tab.id === 'nav-wifi') {
+      tab.style.setProperty('display', 'none', 'important');
+    } else {
+      tab.style.setProperty('display', 'flex', 'important');
+    }
+  });
+
+  document.querySelector('.nav').style.display = 'flex';
+  document.getElementById('guestExitBtn').style.display = 'none';
   ab('LOGIN', {maskId: MASK_ID});
+
+  // Real-time Firebase listener for Hardware tab display
+  db.ref('masks/' + MASK_ID).on('value', snap => {
+    if(snap.exists()){
+      const d = snap.val();
+      updateHardwareDisplay(
+        d.aqi || '--',
+        d.filter || '--',
+        d.breathing_rate || '--',
+        d.effective_filtration || '--',
+        d.ml_warning || 'Normal',
+        d.timestamp
+      );
+    }
+  });
+
+  initApp();
+}
+
+function openHardwareSetup(){
+  isGuest = true;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='flex';
+
+  // Show only BLE and WIFI tabs during setup mode
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    if(tab.id === 'nav-ble' || tab.id === 'nav-wifi') {
+      tab.style.setProperty('display', 'flex', 'important');
+    } else {
+      tab.style.setProperty('display', 'none', 'important');
+    }
+  });
+
+  document.getElementById('guestExitBtn').style.display = 'block';
+  document.getElementById('topMaskId').textContent = 'SETUP MODE';
+  switchTab('ble');
   initApp();
 }
 
@@ -1846,7 +2311,7 @@ async function callML(){
     renderFilter(curFilter);
     document.getElementById('filterReason').textContent =
       `AQI fallback: ${curAQI} → ${curFilter}% (ML offline)`;
-    // Still push fallback data to Firebase so ESP32 gets a value
+    // Still push fallback data to Firebase so Device gets a value
     pushToFirebase(curAQI, curFilter, curBreathing, curActivity, curFilter, curFilter, 0, 'ML offline', 'Using AQI fallback');
     console.warn('ML error:', e);
   }
@@ -1854,10 +2319,10 @@ async function callML(){
 
 // ── Push ML result + raw inputs to Firebase ──
 async function pushToFirebase(aqi, filter, breathing, activity, effectiveFiltration, rawProtection, penalty, warning, advice){
-  if(!MASK_ID) return;
+  if(!MASK_ID || isGuest) return;
   try{
     await db.ref('masks/'+MASK_ID).update({
-      // Core fields — ESP32 reads these
+      // Core fields — Device reads these
       aqi:                   aqi,
       filter:                filter,
       // ML inputs
@@ -1877,7 +2342,6 @@ async function pushToFirebase(aqi, filter, breathing, activity, effectiveFiltrat
     updateSyncCounters();
     document.getElementById('syncStatusText').textContent =
       `Firebase updated — AQI:${aqi} · Filter:${Math.round(effectiveFiltration)}% · Breathing:${breathing} br/min · ${warning}`;
-    updateEspDisplay(aqi, filter, breathing, Math.round(effectiveFiltration), warning, new Date().toISOString());
   } catch(e){
     document.getElementById('syncStatusText').textContent = 'Firebase sync failed — check connection';
     console.warn('Firebase error:', e);
@@ -1890,6 +2354,10 @@ async function autoSyncML(aqi, filter, breathing, activity, eff, penalty, warnin
 }
 
 async function doSync(){
+  if(isGuest){
+    showToast('Login Required', 'Please connect your mask to sync data to the cloud.');
+    return;
+  }
   const btn = document.getElementById('syncBtn');
   btn.textContent = 'CALLING ML...'; btn.disabled = true;
 
@@ -1944,7 +2412,6 @@ async function doSync(){
     btn.textContent = 'FIREBASE UPDATED ✓';
     document.getElementById('syncStatusText').textContent =
       `Firebase updated — AQI:${curAQI} · Filter:${curFilter}% · Breathing:${curBreathing} br/min · ML:${mlData.ml_warning||'—'}`;
-    updateEspDisplay(curAQI, curFilter, curBreathing, curFilter, mlData.ml_warning||'Normal', new Date().toISOString());
     ab('SYNC', {aqi:curAQI, filter:curFilter});
   } catch(e){
     btn.textContent = 'SYNC FAILED ✕';
@@ -1955,7 +2422,7 @@ async function doSync(){
 }
 
 async function autoSync(aqi, filter){
-  if(!MASK_ID) return;
+  if(!MASK_ID || isGuest) return;
   const now = Date.now();
   if(now - lastSentTime < 15000) return;
   if(aqi === lastSentAQI) return;
@@ -2065,13 +2532,23 @@ function renderHistory(){
   }).join('');
 }
 
+function copyText(txt){
+  navigator.clipboard.writeText(txt);
+  showToast('COPIED','Copied to clipboard: '+txt);
+}
+
 /* ═══════════════ LOGOUT ═══════════════ */
 function doLogout(){
   if(fluctuateInterval) clearInterval(fluctuateInterval);
   MASK_ID=''; forecastBuilt=false; aqiHistory=[]; rawPollutants=null; alertLastAQI=-999; syncCount=0;
   localStorage.removeItem('aero5_s');
+
+  // Reset navigation visibility
+  document.querySelectorAll('.nav-tab').forEach(tab => tab.style.display = 'flex');
+
   document.getElementById('appScreen').style.display='none';
   document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('guestExitBtn').style.display='none';
   document.getElementById('maskId').value='';
   document.getElementById('maskKey').value='';
   ab('LOGOUT', {});
@@ -2116,11 +2593,8 @@ async function fetchWAQI(lat, lon){
 
 /* ═══════════════ INIT ═══════════════ */
 function initApp(){
-  // Check for updates
-  checkUpdates();
-
-  // Show ESP badge to draw attention to setup tab
-  setTimeout(()=>{const b=document.getElementById("espBadge");if(b)b.style.display="block";},3000);
+  // Show hardware badge to draw attention to setup tab
+  setTimeout(()=>{const b=document.getElementById("hardwareBadge");if(b)b.style.display="block";},3000);
   renderFilter(72);
   renderHistory();
 
