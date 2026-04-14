@@ -1036,7 +1036,7 @@ iframe.portal-frame{width:100%;height:520px;border:none;display:block;background
                 <div style="font-size:15px; font-weight:700; letter-spacing:0.5px">Connect WiFi</div>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="3" id="chk2" style="opacity:0.3"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
-              <div style="font-size:11px; color:var(--text2); line-height:1.6">Join the AERO5 hotspot using the credentials below. <br><b style="color:var(--amber); text-transform:uppercase; font-size:9px">Pro-tip: Turn off mobile data for a stable link.</b></div>
+              <div style="font-size:11px; color:var(--text2); line-height:1.6">Join the AERO5 hotspot using the credentials below. <br><b style="color:var(--amber); text-transform:uppercase; font-size:9px">Pro-tip: Turn ON Hotspot & Turn OFF mobile data for a stable link.</b></div>
 
               <div style="display:flex; gap:10px; margin-top:15px">
                 <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:10px">
@@ -1722,7 +1722,7 @@ const CURRENT_VERSION = "5.0.0";
 async function checkForUpdates() {
     try {
         // Use a persistent link to a version.json on your GitHub
-        const res = await fetch('https://raw.githubusercontent.com/dheeraj-mca/AERO5-ML-Connected/main/version.json');
+        const res = await fetch('https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/version.json');
         const data = await res.json();
         if(data.version !== CURRENT_VERSION) {
             if(confirm(`New Update Available (v${data.version})!\n\nChanges: ${data.changelog}\n\nWould you like to download it now?`)) {
@@ -1840,10 +1840,19 @@ setTimeout(()=>{
   setTimeout(()=>{
     document.getElementById('splashScreen').style.display='none';
     const sv = localStorage.getItem('aero5_s');
-    if(sv){ try{ MASK_ID=JSON.parse(sv).id; launchApp(); }catch(e){ showLogin(); }}
+    if(sv){ try{ MASK_ID=JSON.parse(sv).id; launchApp(); syncVersion(); }catch(e){ showLogin(); }}
     else showLogin();
   }, 500);
 }, 2400);
+
+function syncVersion(){
+  if(!MASK_ID) return;
+  db.ref('users/' + MASK_ID + '/app_status').update({
+    version: CURRENT_VERSION,
+    last_active: new Date().toISOString(),
+    platform: 'android'
+  });
+}
 
 function showLogin(){ document.getElementById('loginScreen').style.display='flex'; }
 
