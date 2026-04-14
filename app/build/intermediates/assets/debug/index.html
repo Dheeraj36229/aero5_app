@@ -225,6 +225,19 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 }
 .nav-badge.show { display: block; }
 
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity 0.3s ease}
+.modal-overlay.active{display:flex;opacity:1}
+.upd-card{width:100%;max-width:320px;background:var(--surface);border:1.5px solid var(--cyan);border-radius:28px;padding:30px 24px;text-align:center;box-shadow:0 0 40px var(--cyan-glow);transform:scale(0.9);transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)}
+.modal-overlay.active .upd-card{transform:scale(1)}
+.upd-icon{width:64px;height:64px;background:var(--cyan-dim);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--cyan);animation:updFloat 2s ease-in-out infinite}
+@keyframes updFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.upd-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;margin-bottom:10px;color:var(--text)}
+.upd-ver{font-family:'Space Mono',monospace;font-size:11px;color:var(--cyan);background:var(--cyan-dim);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:15px}
+.upd-body{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:25px;text-align:left;background:var(--bg2);padding:15px;border-radius:16px;border:1px solid var(--border)}
+.upd-btn{width:100%;padding:14px;background:linear-gradient(135deg, var(--cyan), var(--teal));border:none;border-radius:14px;color:#050A14;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 15px var(--cyan-glow)}
+.upd-skip{margin-top:15px;font-size:10px;color:var(--text3);text-decoration:underline;cursor:pointer;font-family:'Space Mono',monospace;display:block}
+
 /* ── TABS ── */
 .tab{display:none;animation:tabIn .28s ease both}
 .tab.active{display:block}
@@ -583,6 +596,22 @@ iframe.portal-frame{width:100%;height:520px;border:none;display:block;background
 <body>
 
 <!-- BG -->
+  <!-- Update Modal -->
+  <div class="modal-overlay" id="updModal">
+    <div class="upd-card">
+      <div class="upd-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div class="upd-title">UPDATE READY</div>
+      <div class="upd-ver" id="updVer">v5.0.1</div>
+      <div class="upd-body" id="updLog">
+        • Security patches<br>• UI optimizations
+      </div>
+      <button class="upd-btn" id="updConfirmBtn">INSTALL UPDATE</button>
+      <span class="upd-skip" onclick="closeUpd()">REMIND ME LATER</span>
+    </div>
+  </div>
+
 <div class="bg-canvas">
   <div class="bg-mesh"></div>
   <div class="bg-orb-a"></div>
@@ -1719,19 +1748,35 @@ function updateHardwareDisplay(aqi,filter,breath,eff,warning,ts){
 
 /* ═══ AUTO UPDATE SYSTEM ═══ */
 const CURRENT_VERSION = "5.0.0";
+let pendingUpdateUrl = "";
+
 async function checkForUpdates() {
     try {
-        // Use a persistent link to a version.json on your GitHub
-        const res = await fetch('https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/version.json');
+        const res = await fetch('https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/version.json?t=' + Date.now());
         const data = await res.json();
         if(data.version !== CURRENT_VERSION) {
-            if(confirm(`New Update Available (v${data.version})!\n\nChanges: ${data.changelog}\n\nWould you like to download it now?`)) {
-                ab('DOWNLOAD_UPDATE', {url: data.apk_url});
-            }
+            showUpdateModal(data);
         }
     } catch(e) { console.log("Update check failed", e); }
 }
-setTimeout(checkForUpdates, 5000); // Check 5s after launch
+
+function showUpdateModal(data) {
+    document.getElementById('updVer').textContent = 'v' + data.version;
+    document.getElementById('updLog').innerHTML = data.changelog.split('\n').map(l => '• ' + l).join('<br>');
+    pendingUpdateUrl = data.apk_url;
+    document.getElementById('updModal').classList.add('active');
+    document.getElementById('updConfirmBtn').onclick = () => {
+        ab('DOWNLOAD_UPDATE', {url: pendingUpdateUrl});
+        closeUpd();
+    };
+}
+
+function closeUpd() {
+    document.getElementById('updModal').classList.remove('active');
+}
+
+setTimeout(checkForUpdates, 3000);
+
 
 /* ═══ SCORE CARD ═══ */
 function updateScore(filter){

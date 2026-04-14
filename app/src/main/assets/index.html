@@ -607,7 +607,7 @@ iframe.portal-frame{width:100%;height:520px;border:none;display:block;background
       <div class="upd-body" id="updLog">
         • Security patches<br>• UI optimizations
       </div>
-      <button class="upd-btn" id="updConfirmBtn">INSTALL UPDATE</button>
+      <button class="upd-btn" id="updConfirmBtn" onclick="installUpdate()">INSTALL UPDATE</button>
       <span class="upd-skip" onclick="closeUpd()">REMIND ME LATER</span>
     </div>
   </div>
@@ -1765,10 +1765,13 @@ function showUpdateModal(data) {
     document.getElementById('updLog').innerHTML = data.changelog.split('\n').map(l => '• ' + l).join('<br>');
     pendingUpdateUrl = data.apk_url;
     document.getElementById('updModal').classList.add('active');
-    document.getElementById('updConfirmBtn').onclick = () => {
+}
+
+function installUpdate() {
+    if(pendingUpdateUrl) {
         ab('DOWNLOAD_UPDATE', {url: pendingUpdateUrl});
-        closeUpd();
-    };
+    }
+    closeUpd();
 }
 
 function closeUpd() {
