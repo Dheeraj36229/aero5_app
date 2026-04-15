@@ -1,5 +1,5 @@
 {
-  "version": "5.0.5",
-  "changelog": "Critical Fix: Resolved 'App is not valid' (Parse Error) by ensuring higher version code (v10).",
+  "version": "5.0.6",
+  "changelog": "Update Fix: Improved version comparison to prevent infinite update loops.",
   "apk_url": "https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/AERO5_v5.apk"
 }
