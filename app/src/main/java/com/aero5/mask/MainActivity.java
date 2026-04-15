@@ -14,7 +14,11 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.app.DownloadManager;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -56,6 +60,41 @@ public class MainActivity extends AppCompatActivity {
     private boolean isScanning = false;
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (downloadId != -1) {
+                installApk(downloadId);
+            }
+        }
+    };
+
+    private void installApk(long downloadId) {
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri apkUri = downloadManager.getUriForDownloadedFile(downloadId);
+
+        if (apkUri != null) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                // Check if we can install from unknown sources (Android 8.0+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!getPackageManager().canRequestPackageInstalls()) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                Uri.parse("package:" + getPackageName())));
+                        return;
+                    }
+                }
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Common UUIDs for ESP32 BLE provisioning or custom service
     private static final UUID SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
     private static final UUID CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8");
@@ -82,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
         setupWebView();
         initBluetooth();
         requestPermissions();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(downloadReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(downloadReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        }
     }
 
     private void initBluetooth() {
@@ -221,13 +266,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void handleDownload(String url) {
-            android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(Uri.parse(url));
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
             request.setTitle("AERO5 Update");
             request.setDescription("Downloading new version...");
-            request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalFilesDir(MainActivity.this, android.os.Environment.DIRECTORY_DOWNLOADS, "AERO5_Update.apk");
 
-            android.app.DownloadManager manager = (android.app.DownloadManager) getSystemService(android.content.Context.DOWNLOAD_SERVICE);
+            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             manager.enqueue(request);
 
             android.widget.Toast.makeText(MainActivity.this, "Update Started. Check notifications.", android.widget.Toast.LENGTH_LONG).show();
@@ -396,6 +441,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try {
+            unregisterReceiver(downloadReceiver);
+        } catch (Exception e) {
+            // Already unregistered or not registered
+        }
         webView.destroy();
     }
 }

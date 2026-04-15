@@ -225,9 +225,30 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 }
 .nav-badge.show { display: block; }
 
-/* ── MODALS ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity 0.3s ease}
-.modal-overlay.active{display:flex;opacity:1}
+/* ── MODALS & OVERLAYS ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-overlay.active, .modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Update Modal Specifics */
+#updModal { display: none; }
+#updModal.active { display: flex; }
 .upd-card{width:100%;max-width:320px;background:var(--surface);border:1.5px solid var(--cyan);border-radius:28px;padding:30px 24px;text-align:center;box-shadow:0 0 40px var(--cyan-glow);transform:scale(0.9);transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)}
 .modal-overlay.active .upd-card{transform:scale(1)}
 .upd-icon{width:64px;height:64px;background:var(--cyan-dim);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--cyan);animation:updFloat 2s ease-in-out infinite}
@@ -492,8 +513,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Inter',s
 .danger-btn:active{background:rgba(244,63,94,.12)}
 
 /* ── CHANGE KEY MODAL ── */
-.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
-.modal-overlay.open{opacity:1;pointer-events:auto}
+#changeKeyModal {
+  align-items: flex-end;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 2100;
+}
 .modal-sheet{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border2);border-radius:28px 28px 0 0;padding:24px 22px 40px;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);position:relative}
 .modal-overlay.open .modal-sheet{transform:translateY(0)}
 .modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 22px}
@@ -1769,6 +1794,7 @@ function showUpdateModal(data) {
 
 function installUpdate() {
     if(pendingUpdateUrl) {
+        showToast('DOWNLOADING', 'Starting update download: ' + (document.getElementById('updVer').textContent || 'v5.0.1'));
         ab('DOWNLOAD_UPDATE', {url: pendingUpdateUrl});
     }
     closeUpd();
