@@ -72,26 +72,47 @@ public class MainActivity extends AppCompatActivity {
 
     private void installApk(long downloadId) {
         DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri apkUri = downloadManager.getUriForDownloadedFile(downloadId);
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadId);
+        Cursor cursor = downloadManager.query(query);
 
-        if (apkUri != null) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            try {
-                // Check if we can install from unknown sources (Android 8.0+)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (!getPackageManager().canRequestPackageInstalls()) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
-                                Uri.parse("package:" + getPackageName())));
-                        return;
+        if (cursor != null && cursor.moveToFirst()) {
+            int statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+            int status = cursor.getInt(statusIndex);
+
+            if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                int uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+                String localUriStr = cursor.getString(uriIndex);
+                if (localUriStr != null) {
+                    Uri apkUri = Uri.parse(localUriStr);
+                    
+                    // On Android 7.0+, we must use FileProvider for content:// URIs if the installer can't access it
+                    // But DownloadManager already provides a content URI if we use getUriForDownloadedFile
+                    Uri contentUri = downloadManager.getUriForDownloadedFile(downloadId);
+
+                    if (contentUri != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (!getPackageManager().canRequestPackageInstalls()) {
+                                    startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                            Uri.parse("package:" + getPackageName())));
+                                    android.widget.Toast.makeText(this, "Enable 'Install unknown apps' and try again.", android.widget.Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                            }
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            android.util.Log.e("AERO5_UPDATE", "Installation failed", e);
+                            android.widget.Toast.makeText(this, "Installation failed: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            cursor.close();
         }
     }
 
@@ -269,8 +290,11 @@ public class MainActivity extends AppCompatActivity {
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
             request.setTitle("AERO5 Update");
             request.setDescription("Downloading new version...");
+            request.setMimeType("application/vnd.android.package-archive");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setDestinationInExternalFilesDir(MainActivity.this, android.os.Environment.DIRECTORY_DOWNLOADS, "AERO5_Update.apk");
+            
+            // Using public Downloads directory for better accessibility by the system installer
+            request.setDestinationInExternalPublicDir(android.os.Environment.DIRECTORY_DOWNLOADS, "AERO5_v5.apk");
 
             DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             manager.enqueue(request);
