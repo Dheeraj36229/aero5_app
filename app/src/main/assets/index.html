@@ -1772,17 +1772,36 @@ function updateHardwareDisplay(aqi,filter,breath,eff,warning,ts){
 }
 
 /* ═══ AUTO UPDATE SYSTEM ═══ */
-const CURRENT_VERSION = "5.0.0";
+const CURRENT_VERSION = "5.0.8";
 let pendingUpdateUrl = "";
+
+function compareVersions(v1, v2) {
+    const a = v1.split('.').map(Number);
+    const b = v2.split('.').map(Number);
+    for (let i = 0; i < 3; i++) {
+        if (a[i] > (b[i] || 0)) return 1;
+        if (a[i] < (b[i] || 0)) return -1;
+    }
+    return 0;
+}
 
 async function checkForUpdates() {
     try {
-        const res = await fetch('https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/version.json?t=' + Date.now());
+        // Syncing with Firebase for the latest version info
+        const res = await fetch('https://aero5-886bf-default-rtdb.asia-southeast1.firebasedatabase.app/app_update.json');
         const data = await res.json();
-        if(data.version !== CURRENT_VERSION) {
-            showUpdateModal(data);
+
+        if(data && data.latest_version) {
+            // Compare Firebase's version with the app's version
+            if(compareVersions(String(data.latest_version), CURRENT_VERSION) > 0) {
+                showUpdateModal({
+                    version: data.latest_version,
+                    changelog: "A new version of AERO5 is available for download.",
+                    apk_url: data.apk_url
+                });
+            }
         }
-    } catch(e) { console.log("Update check failed", e); }
+    } catch(e) { console.log("Firebase sync failed", e); }
 }
 
 function showUpdateModal(data) {
