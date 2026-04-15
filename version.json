@@ -1,5 +1,5 @@
 {
-  "version": "5.0.6",
-  "changelog": "Update Fix: Improved version comparison to prevent infinite update loops.",
+  "version": "5.0.7",
+  "changelog": "Auto-Update Test: This notification appears because GitHub has a higher version (5.0.7) than your app (5.0.6).",
   "apk_url": "https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/AERO5_v5.apk"
 }
