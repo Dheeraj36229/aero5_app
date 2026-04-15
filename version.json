@@ -1,5 +1,5 @@
 {
-  "version": "5.0.1",
-  "changelog": "Testing Update System: Improved Firebase sync and real-time version reporting.",
+  "version": "5.0.5",
+  "changelog": "Critical Fix: Resolved 'App is not valid' (Parse Error) by ensuring higher version code (v10).",
   "apk_url": "https://raw.githubusercontent.com/Dheeraj36229/aero5_app/main/AERO5_v5.apk"
 }
